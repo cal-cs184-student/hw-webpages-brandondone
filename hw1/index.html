@@ -28,7 +28,7 @@
 	<body>
 		<div class="container">
 		<h1>CS184/284A Spring 2026 Homework 1 Write-Up</h1>
-		<div style="text-align: center;">Names: </div>
+		<div style="text-align: center;">Names: Brandon Done</div>
 
 		<br>
 
@@ -48,21 +48,46 @@
 		-->
 
 		<h2>Overview</h2>
-		Give a high-level overview of what you implemented in this homework. Think about what you've built as a whole. Share your thoughts on what interesting things you've learned from completing the homework.
+		<p>
+			In this homework I built a small rasterization pipeline from the ground up: scanline
+			triangle filling, barycentric interpolation, and a transform stack for placing and
+			rotating shapes. I then expanded the pipeline with supersampling for antialiasing and
+			texture mapping, including nearest/bilinear pixel sampling and mipmapped level
+			sampling to handle minification.
+		</p>
+		<p>
+			The most interesting takeaway was seeing how each stage affects visual quality and
+			performance. Supersampling cleans up geometric edges but is expensive, while mipmaps
+			target texture aliasing efficiently. Thinking in terms of coverage, interpolation, and
+			filtering made it clear why specific artifacts appear and how different sampling
+			strategies mitigate them.
+		</p>
 
 		<h2>Task 1: Drawing Single-Color Triangles</h2>
-		Walkthrough
+		<h3>Walkthrough</h3>
+		<p>
+			I rasterize each triangle by scanning row-by-row (per pixel y). For each scanline,
+			I compute where that horizontal line intersects the triangle’s edges. Those
+			intersections define a left/right x range. I then fill every pixel whose center
+			(x+0.5, y+0.5) lies between those two x-intersections. This draws the triangle
+			regardless of vertex winding order and includes boundary samples.
+		</p>
 
-		I rasterize each triangle by scanning row-by-row (per pixel y). For each scanline, I compute where that horizontal line intersects the triangle’s edges. Those intersections define a left/right x range. I then fill every pixel whose center (x+0.5, y+0.5) lies between those two x-intersections. This draws the triangle regardless of vertex winding order and includes boundary samples.
-		
-		Why it’s no worse than bounding‑box sampling
+		<h3>Why it’s no worse than bounding-box sampling</h3>
+		<p>
+			The bounding-box method checks every pixel in the triangle’s bounding rectangle.
+			My scanline approach only checks pixels that lie between the two edge intersections
+			for each row, which is a subset of that bounding box. So it cannot be worse; it does
+			strictly fewer checks when the triangle occupies a small portion of its bounding box.
+		</p>
 
-		The bounding‑box method checks every pixel in the triangle’s bounding rectangle. My scanline approach only checks pixels that lie between the two edge intersections for each row, which is a subset of that bounding box. So it cannot be worse; it does strictly fewer checks when the triangle occupies a small portion of its bounding box.
-
-		Extra credit (optimizations + timing)My optimizations beyond naive bounding‑box testing are:
-		1. Span filling: For each scanline, compute just two intersections and fill a contiguous pixel span, instead of testing every pixel.
-		2. Incremental edge stepping: Precompute inv_dy per edge and increment intersection x per row to avoid repeated division.
-		3. Minimal math per pixel: No per‑pixel edge tests inside the span; just fill.
+		<h3>Extra credit (optimizations + timing)</h3>
+		<p>My optimizations beyond naive bounding-box testing are:</p>
+		<ol>
+			<li>Span filling: For each scanline, compute just two intersections and fill a contiguous pixel span, instead of testing every pixel.</li>
+			<li>Incremental edge stepping: Precompute inv_dy per edge and increment intersection x per row to avoid repeated division.</li>
+			<li>Minimal math per pixel: No per-pixel edge tests inside the span; just fill.</li>
+		</ol>
 
 
 		<p>Here is an example 2x2 gridlike structure using an HTML table. Each <b>tr</b> is a row and each <b>td</b> is a column in that row. You might find this useful for framing and showing your result images in an organized fashion.</p>
@@ -92,19 +117,188 @@
 		</div>
 		
 		<h2>Task 2: Antialiasing by Supersampling</h2>
-		Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+		<h3>Supersampling algorithm and data structures</h3>
+		<ul>
+			<li>Data structure: sample_buffer is a flat array of Color sized width * height * sample_rate. Samples for pixel (x, y) are stored contiguously at index (y * width + x) * sample_rate + i.</li>
+			<li>Triangle rasterization (supersampling): For sample_rate &gt; 1, rasterize_triangle computes a per-pixel bounding box. It uses a sample_dim x sample_dim grid (with sample_dim as the smallest integer where sample_dim^2 &gt;= sample_rate) and samples at cell centers: px = x + (sx + 0.5) / sample_dim, py = y + (sy + 0.5) / sample_dim. Each sample is tested with edge functions; if inside, it writes color into that subsample slot in sample_buffer.</li>
+			<li>Points/lines: fill_pixel writes the same color into all subsamples of the pixel so points/lines still appear correctly (not antialiased).</li>
+			<li>Resolve step: resolve_to_framebuffer averages the sample_rate colors per pixel, then converts to 8-bit RGB.</li>
+		</ul>
+
+		<h3>Why supersampling is useful</h3>
+		<p>
+			Supersampling reduces aliasing (jagged edges) by evaluating coverage at multiple
+			subpixel locations and averaging. Edges that only partially cover a pixel contribute
+			partial intensity instead of snapping to fully-on or fully-off, producing smoother
+			silhouettes.
+		</p>
+
+		<h3>Pipeline modifications made</h3>
+		<ol>
+			<li>Sample buffer sizing depends on width * height * sample_rate in the constructor and is updated in set_sample_rate and set_framebuffer_target.</li>
+			<li>Triangle rasterization writes into the supersample buffer using a subpixel grid.</li>
+			<li>Line/point rasterization uses fill_pixel to populate all subsamples for that pixel.</li>
+			<li>Resolve step averages subsamples into the final framebuffer.</li>
+		</ol>
+
+		<h3>How supersampling antialiases triangles</h3>
+		<p>
+			For each pixel, the algorithm checks multiple subpixel locations against the triangle
+			edges. The final color is the average of subsamples inside the triangle. Near edges,
+			only a fraction of subsamples are covered, so the resulting pixel color is proportionally
+			dimmer. This produces a smooth transition instead of a hard jagged boundary.
+		</p>
+
+		<h3>Screenshots</h3>
+		<h4>Visual differences</h4>
+		<ul>
+			<li>Sample rate 1: Edges appear jagged and stair-stepped. Thin triangles may look uneven or broken at the tip.</li>
+			<li>Sample rate 4: Edges are noticeably smoother. The thin tip still shows some stair steps but with softer transitions.</li>
+			<li>Sample rate 16: Edges are significantly smoother; the thin tip has a more gradual falloff and looks closer to a clean line.</li>
+		</ul>
+		<p>
+			Why the results look this way: Higher sample rates approximate the true fractional
+			coverage of the triangle within each pixel, so the averaged pixel values create a
+			smoother, more continuous edge.
+		</p>
+
+		<h3>Alternative method: jittered (stochastic) supersampling within each grid cell</h3>
+		<ul>
+			<li>What it is: Instead of sampling each subpixel at the exact center of its grid cell, each sample is randomly (but deterministically) offset within its cell. This is still a regular sample_dim x sample_dim grid, but the sample locations are jittered per cell.</li>
+			<li>Where it’s implemented: In RasterizerImp::rasterize_triangle, inside the supersampling loop. The standard grid centers (sx + 0.5, sy + 0.5) are replaced with (sx + jx, sy + jy), where jx and jy are in [0, 1).</li>
+			<li>How randomness is generated (deterministic hash): The jitter values are generated from a simple hash based on (x, y, sx, sy) so the pattern is stable per pixel and sub-sample and does not flicker between frames.</li>
+			<li>Why it helps: Regular grid sampling can create structured aliasing artifacts, especially along long straight edges or thin triangles that align with the grid. Jittering breaks up those structured patterns into more noise-like error, which is generally less visually objectionable and tends to make edges look more natural.</li>
+			<li>Tradeoffs: Pros: Reduces moire/structured jaggies; edges can look more organic. Cons: Introduces a small amount of noise, especially at low sample rates. At high sample rates (e.g., 16), this noise is minimal.</li>
+		</ul>
+
 
 		<h2>Task 3: Transforms</h2>
-		Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+		<h3>Write-up (matrix stack changes for viewport rotation)</h3>
+		<p>
+			I added a viewport rotation in NDC space so the SVG content can be rotated without
+			touching SVG-space geometry. The original render pipeline in DrawRend::redraw() used:
+		</p>
+		<pre><code>ndc_to_screen * svg_to_ndc</code></pre>
+		<p>
+			To rotate the viewport, I inserted an NDC-space rotation around the center of NDC
+			(0.5, 0.5). That rotation is built as:
+		</p>
+		<pre><code>ndc_rotate = translate(0.5, 0.5) * rotate(theta) * translate(-0.5, -0.5)</code></pre>
+		<p>And the full pipeline becomes:</p>
+		<pre><code>ndc_to_screen * ndc_rotate * svg_to_ndc</code></pre>
+		<p>This means:</p>
+		<ul>
+			<li>svg_to_ndc still maps SVG coordinates into the [0,1]^2 normalized device coordinate square.</li>
+			<li>ndc_rotate rotates that square about its center.</li>
+			<li>ndc_to_screen then maps the rotated NDC coordinates into pixel space.</li>
+		</ul>
+		<p>
+			Rotating at the NDC stage keeps the rotation centered in the viewport and avoids
+			changing the SVG’s internal transforms. Keys [ and ] adjust theta by +/-5 degrees and
+			rebuild ndc_rotate.
+		</p>
+		<p>
+			I updated the cubeman to look like he’s running while waving. The right arm is
+			rotated upward at the shoulder and further bent at the elbow to make a wave, while
+			the left arm trails downward. The legs are rotated in opposite directions to suggest
+			forward motion, and I adjusted the colors to make the pose read more clearly.
+		</p>
 
 		<h2>Task 4: Barycentric coordinates</h2>
-		Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+		<p>
+			For any point inside a triangle, you can express its position as a weighted blend of
+			the triangle’s three vertices. Those three weights are the barycentric coordinates.
+		</p>
+		<ul>
+			<li>Each weight corresponds to one vertex.</li>
+			<li>All three weights sum to 1.</li>
+			<li>Inside the triangle, each weight is between 0 and 1.</li>
+		</ul>
+		<p>
+			So if you assign colors to each vertex (red, green, blue), the point’s color becomes
+			the same weighted blend of those three colors. That’s why you get a smooth gradient
+			across the triangle.
+		</p>
 
 		<h2>Task 5: "Pixel sampling" for texture mapping</h2>
-		Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+		<p>
+			Pixel sampling picks a texture color for a given UV coordinate in [0,1] and uses that
+			as the fragment color. In rasterizer.cpp, I compute barycentric weights per covered
+			sample, interpolate the per-vertex UVs to get a UV for that sample, then call either
+			Texture::sample_nearest or Texture::sample_bilinear at mip level 0 based on psm. In
+			texture.cpp, those functions convert UVs to texel space and return a filtered color.
+		</p>
+
+		<h3>Nearest sampling</h3>
+		<ul>
+			<li>Scale UV by texture width/height to get texel coordinates.</li>
+			<li>Clamp to the valid range.</li>
+			<li>Return the single closest texel color.</li>
+		</ul>
+
+		<h3>Bilinear sampling</h3>
+		<ul>
+			<li>Convert UV to continuous texel space with a half-texel shift.</li>
+			<li>Clamp to the valid range.</li>
+			<li>Fetch the four surrounding texels.</li>
+			<li>Compute fractional offsets and blend the four colors with bilinear weights.</li>
+		</ul>
+		<p>Nearest yields sharper but blockier results; bilinear is smoother and reduces blockiness.</p>
+
+		<h3>Visual comparisons</h3>
+		<ol>
+			<li>Nearest, 1 spp: Sharp but blocky texture edges. Visible pixel stair-steps on diagonals. Hard aliasing on high-frequency textures.</li>
+			<li>Nearest, 16 spp: Geometry edges are smoother (less jagged), but textures still look blocky. The texture aliasing remains because sampling is still nearest.</li>
+			<li>Bilinear, 1 spp: Texture looks smoother and less blocky. Some blur. Geometry edges still jagged (aliasing along triangle edges).</li>
+			<li>Bilinear, 16 spp: Best overall. Smooth geometry edges and smoother texture sampling. Least aliasing; still not perfect for minification without mipmaps.</li>
+		</ol>
+
+		<h3>Relative differences</h3>
+		<ul>
+			<li>Nearest vs bilinear: The biggest visible change is in texture appearance. Nearest preserves hard texel boundaries; bilinear blends neighboring texels, reducing blockiness but adding blur.</li>
+			<li>1 spp vs 16 spp: The biggest change is in edge smoothness of geometry (triangle boundaries). Super-sampling reduces jagged edges regardless of texture filter.</li>
+		</ul>
+
+		<h3>When the difference is large (and why)</h3>
+		<ul>
+			<li>Large difference between nearest and bilinear happens when the texture is high-frequency (checkerboards, fine text, thin lines) or when the texture is magnified. Nearest produces blocky pixels; bilinear blends them, reducing pixelation.</li>
+			<li>Large difference between 1 spp and 16 spp happens on sharp geometric edges, thin triangles, or strong contrast boundaries. Super-sampling averages subpixel coverage, reducing aliasing.</li>
+			<li>Without mipmaps, both methods can still alias under minification (texture shrunk on screen).</li>
+		</ul>
 
 		<h2>Task 6: "Level Sampling" with mipmaps for texture mapping</h2>
-		Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+		<h3>Level sampling (what it is + how I implemented it)</h3>
+		<p>
+			Level sampling chooses which mipmap level to sample based on how quickly texture
+			coordinates change across the screen. When a texture is minified, sampling the base
+			level causes aliasing; mipmaps provide prefiltered, lower-resolution versions to fix
+			that.
+		</p>
+		<p>
+			In my implementation, Texture::get_level computes derivatives of the UVs across
+			screen space using sp.p_dx_uv - sp.p_uv and sp.p_dy_uv - sp.p_uv, scales those by the
+			full-resolution texture size, and then computes the mip level as
+			0.5 * log2(max(||dUV/dx||^2, ||dUV/dy||^2)), clamped to [0, maxLevel].
+		</p>
+		<p>In Texture::sample, level sampling works as follows:</p>
+		<ul>
+			<li>L_ZERO: always sample mip level 0 (same as Task 5).</li>
+			<li>L_NEAREST: compute level, round to nearest integer, and sample that level.</li>
+			<li>L_LINEAR: compute a continuous level, then linearly blend the samples from the two adjacent levels (trilinear filtering when paired with bilinear pixel sampling).</li>
+		</ul>
+
+		<h3>Tradeoffs: pixel sampling vs level sampling vs supersampling</h3>
+		<ol>
+			<li>Pixel sampling (nearest vs bilinear): Speed: Nearest is fastest; bilinear is moderately slower. Memory: No extra memory. Antialiasing: Helps with magnification (smooths blockiness) but does not fix minification aliasing by itself.</li>
+			<li>Level sampling (mipmapping: L_ZERO / L_NEAREST / L_LINEAR): Speed: L_ZERO is fastest; L_NEAREST adds a small cost; L_LINEAR is slower (two samples + blend). Memory: Requires storing mipmaps (extra memory, ~1/3 more). Antialiasing: Strong improvement for minification; reduces shimmering/moire when textures shrink.</li>
+			<li>Supersampling (increasing samples per pixel): Speed: Most expensive; cost grows linearly with samples per pixel. Memory: Larger sample buffer, also linear with sample count. Antialiasing: Best at handling geometric aliasing (edges) and high-frequency texture detail; combines well with mipmapping for highest quality.</li>
+		</ol>
+		<p>
+			In short: pixel sampling is cheap but limited, level sampling tackles texture
+			minification efficiently (with some memory overhead), and supersampling delivers the
+			strongest overall antialiasing but at the highest cost.
+		</p>
+
 
 		</div>
 	</body>
