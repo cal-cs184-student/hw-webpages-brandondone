@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="400" height="320" viewBox="0 0 400 320">
+  <defs>
+    <!-- A triangle with per-vertex colors via linear gradients + clip path -->
+    <clipPath id="tri">
+      <polygon points="60,260 340,260 200,40"/>
+    </clipPath>
+
+    <!-- Approximate barycentric interpolation using three gradients -->
+    <linearGradient id="gradR" x1="60" y1="260" x2="200" y2="40" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="red" stop-opacity="1"/>
+      <stop offset="1" stop-color="red" stop-opacity="0"/>
+    </linearGradient>
+
+    <linearGradient id="gradG" x1="340" y1="260" x2="200" y2="40" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="green" stop-opacity="1"/>
+      <stop offset="1" stop-color="green" stop-opacity="0"/>
+    </linearGradient>
+
+    <linearGradient id="gradB" x1="200" y1="40" x2="200" y2="260" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="blue" stop-opacity="1"/>
+      <stop offset="1" stop-color="blue" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+
+  <!-- White background -->
+  <rect x="0" y="0" width="400" height="320" fill="white"/>
+
+  <!-- Blend three gradients, clipped to triangle -->
+  <g clip-path="url(#tri)">
+    <rect x="0" y="0" width="400" height="320" fill="url(#gradR)"/>
+    <rect x="0" y="0" width="400" height="320" fill="url(#gradG)"/>
+    <rect x="0" y="0" width="400" height="320" fill="url(#gradB)"/>
+  </g>
+
+  <!-- Triangle outline -->
+  <polygon points="60,260 340,260 200,40" fill="none" stroke="black" stroke-width="2"/>
+
+  <!-- Vertex markers -->
+  <circle cx="60" cy="260" r="6" fill="red"/>
+  <circle cx="340" cy="260" r="6" fill="green"/>
+  <circle cx="200" cy="40" r="6" fill="blue"/>
+</svg>

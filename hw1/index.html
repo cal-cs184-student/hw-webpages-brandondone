@@ -81,40 +81,25 @@
 			strictly fewer checks when the triangle occupies a small portion of its bounding box.
 		</p>
 
-		<h3>Extra credit (optimizations + timing)</h3>
+		<figure>
+			<img src="screenshot_2-9_18-6-27.png" alt="task_1" style="width:50%"/>
+			<figcaption>A png screenshot of basic/test4.svg with the default viewing parameters</figcaption>
+		</figure>
+
+		<h3>Extra credit (optimizations)</h3>
 		<p>My optimizations beyond naive bounding-box testing are:</p>
 		<ol>
 			<li>Span filling: For each scanline, compute just two intersections and fill a contiguous pixel span, instead of testing every pixel.</li>
 			<li>Incremental edge stepping: Precompute inv_dy per edge and increment intersection x per row to avoid repeated division.</li>
 			<li>Minimal math per pixel: No per-pixel edge tests inside the span; just fill.</li>
 		</ol>
-
-
-		<p>Here is an example 2x2 gridlike structure using an HTML table. Each <b>tr</b> is a row and each <b>td</b> is a column in that row. You might find this useful for framing and showing your result images in an organized fashion.</p>
-		<div style="display: flex; flex-direction: column; align-items: center;">
-			<table style="width: 100%; text-align: center; border-collapse: collapse;">
-			  <tr>
-				<td style="text-align: center;">
-				  <img src="lion.jpg" width="400px"/>
-				  <figcaption>Caption goes here.</figcaption>
-				</td>
-				<td style="text-align: center;">
-				  <img src="lion.jpg" width="400px"/>
-				  <figcaption>Caption goes here.</figcaption>
-				</td>
-			  </tr>
-			  <tr>
-				<td style="text-align: center;">
-				  <img src="lion.jpg" width="400px"/>
-				  <figcaption>Caption goes here.</figcaption>
-				</td>
-				<td style="text-align: center;">
-				  <img src="lion.jpg" width="400px"/>
-				  <figcaption>Caption goes here.</figcaption>
-				</td>
-			  </tr>
-			</table>
-		</div>
+		<h3>Extra credit (timing)</h3>
+		<ul>
+			<li>With optimization: svg.draw: 0.198 ms.</li>
+			<li>Without optimization: sdraw: 0.634 ms.</li>
+			<li>SVG is test6.svg.</li>
+			<li>Speedup = Without Optimization / With Optimization = 3.20x.</li>
+		</ul>
 		
 		<h2>Task 2: Antialiasing by Supersampling</h2>
 		<h3>Supersampling algorithm and data structures</h3>
@@ -161,8 +146,32 @@
 			coverage of the triangle within each pixel, so the averaged pixel values create a
 			smoother, more continuous edge.
 		</p>
+		<div style="display: flex; flex-direction: column; align-items: center;">
+			<table style="width: 100%; text-align: center; border-collapse: collapse;">
+			  <tr>
+				<td style="text-align: center;">
+				  <img src="screenshot_2-9_18-28-38.png" width="400px"/>
+				  <figcaption>default viewing parameters and sample rates 1</figcaption>
+				</td>
+				<td style="text-align: center;">
+				  <img src="screenshot_2-9_18-28-44.png" width="400px"/>
+				  <figcaption>default viewing parameters and sample rates 4</figcaption>
+				</td>
+			  </tr>
+			  <tr>
+				<td style="text-align: center;">
+				  <img src="screenshot_2-9_18-28-51.png" width="400px"/>
+				  <figcaption>default viewing parameters and sample rates 16</figcaption>
+				</td>
+				<td style="text-align: center;">
+				  <img src="lion.jpg" width="400px"/>
+				  <figcaption>This is a lion.</figcaption>
+				</td>
+			  </tr>
+			</table>
+		</div>
 
-		<h3>Alternative method: jittered (stochastic) supersampling within each grid cell</h3>
+		<h3>Extra Credit: alternative method with jittered (stochastic) supersampling within each grid cell</h3>
 		<ul>
 			<li>What it is: Instead of sampling each subpixel at the exact center of its grid cell, each sample is randomly (but deterministically) offset within its cell. This is still a regular sample_dim x sample_dim grid, but the sample locations are jittered per cell.</li>
 			<li>Where it’s implemented: In RasterizerImp::rasterize_triangle, inside the supersampling loop. The standard grid centers (sx + 0.5, sy + 0.5) are replaced with (sx + jx, sy + jy), where jx and jy are in [0, 1).</li>
@@ -170,10 +179,34 @@
 			<li>Why it helps: Regular grid sampling can create structured aliasing artifacts, especially along long straight edges or thin triangles that align with the grid. Jittering breaks up those structured patterns into more noise-like error, which is generally less visually objectionable and tends to make edges look more natural.</li>
 			<li>Tradeoffs: Pros: Reduces moire/structured jaggies; edges can look more organic. Cons: Introduces a small amount of noise, especially at low sample rates. At high sample rates (e.g., 16), this noise is minimal.</li>
 		</ul>
+		<div style="display: flex; flex-direction: column; align-items: center;">
+			<table style="width: 100%; text-align: center; border-collapse: collapse;">
+			  <tr>
+				<td style="text-align: center;">
+				  <img src="screenshot_2-9_18-39-57.png" width="400px"/>
+				  <figcaption>alternate viewing parameters and sample rates 1</figcaption>
+				</td>
+				<td style="text-align: center;">
+				  <img src="screenshot_2-9_18-40-2.png" width="400px"/>
+				  <figcaption>alternate viewing parameters and sample rates 4</figcaption>
+				</td>
+			  </tr>
+			  <tr>
+				<td style="text-align: center;">
+				  <img src="screenshot_2-9_18-40-6.png" width="400px"/>
+				  <figcaption>alternate viewing parameters and sample rates 16</figcaption>
+				</td>
+				<td style="text-align: center;">
+				  <img src="lion.jpg" width="400px"/>
+				  <figcaption>This is just a lion.</figcaption>
+				</td>
+			  </tr>
+			</table>
+		</div>
 
 
 		<h2>Task 3: Transforms</h2>
-		<h3>Write-up (matrix stack changes for viewport rotation)</h3>
+		<h3>Extra Credit</h3>
 		<p>
 			I added a viewport rotation in NDC space so the SVG content can be rotated without
 			touching SVG-space geometry. The original render pipeline in DrawRend::redraw() used:
@@ -197,12 +230,21 @@
 			changing the SVG’s internal transforms. Keys [ and ] adjust theta by +/-5 degrees and
 			rebuild ndc_rotate.
 		</p>
+		<figure>
+			<img src="robot_viewport_rotate.png" alt="task_3_ec" style="width:50%"/>
+			<figcaption>Extra credit: rotate the viewport</figcaption>
+		</figure>
+		<h3>Write-Up</h3>
 		<p>
 			I updated the cubeman to look like he’s running while waving. The right arm is
 			rotated upward at the shoulder and further bent at the elbow to make a wave, while
 			the left arm trails downward. The legs are rotated in opposite directions to suggest
 			forward motion, and I adjusted the colors to make the pose read more clearly.
 		</p>
+		<figure>
+			<img src="my_robot.png" alt="robot" style="width:50%"/>
+			<figcaption> Running and waving robot</figcaption>
+		</figure>
 
 		<h2>Task 4: Barycentric coordinates</h2>
 		<p>
@@ -219,6 +261,14 @@
 			the same weighted blend of those three colors. That’s why you get a smooth gradient
 			across the triangle.
 		</p>
+		<figure>
+			<img src="triangle_barycentric.svg" alt="barycentric" style="width:50%"/>
+			<figcaption>This SVG blends the three vertex colors across the triangle to mirror the idea of barycentric interpolation.</figcaption>
+		</figure>
+		<figure>
+			<img src="screenshot_2-9_19-20-0.png" alt="task_4" style="width:50%"/>
+			<figcaption>Screenshot of svg/basic/test7.svg with default viewing parameters and sample rate 1.<figcaption>
+		</figure>
 
 		<h2>Task 5: "Pixel sampling" for texture mapping</h2>
 		<p>
@@ -265,6 +315,30 @@
 			<li>Large difference between 1 spp and 16 spp happens on sharp geometric edges, thin triangles, or strong contrast boundaries. Super-sampling averages subpixel coverage, reducing aliasing.</li>
 			<li>Without mipmaps, both methods can still alias under minification (texture shrunk on screen).</li>
 		</ul>
+		<div style="display: flex; flex-direction: column; align-items: center;">
+			<table style="width: 100%; text-align: center; border-collapse: collapse;">
+			  <tr>
+				<td style="text-align: center;">
+				  <img src="screenshot_2-9_20-28-40.png" width="400px"/>
+				  <figcaption>nearest sampling at 1 sample per pixel</figcaption>
+				</td>
+				<td style="text-align: center;">
+				  <img src="screenshot_2-9_20-28-48.png" width="400px"/>
+				  <figcaption>nearest sampling at 16 samples per pixel</figcaption>
+				</td>
+			  </tr>
+			  <tr>
+				<td style="text-align: center;">
+				  <img src="screenshot_2-9_20-28-54.png" width="400px"/>
+				  <figcaption>bilinear sampling at 1 sample per pixel</figcaption>
+				</td>
+				<td style="text-align: center;">
+				  <img src="screenshot_2-9_20-29-0.png" width="400px"/>
+				  <figcaption>bilinear sampling at 16 samples per pixel</figcaption>
+				</td>
+			  </tr>
+			</table>
+		</div>
 
 		<h2>Task 6: "Level Sampling" with mipmaps for texture mapping</h2>
 		<h3>Level sampling (what it is + how I implemented it)</h3>
@@ -298,6 +372,30 @@
 			minification efficiently (with some memory overhead), and supersampling delivers the
 			strongest overall antialiasing but at the highest cost.
 		</p>
+		<div style="display: flex; flex-direction: column; align-items: center;">
+			<table style="width: 100%; text-align: center; border-collapse: collapse;">
+			  <tr>
+				<td style="text-align: center;">
+				  <img src="screenshot_2-9_22-1-23.png" width="400px"/>
+				  <figcaption>L_ZERO and P_NEAREST.</figcaption>
+				</td>
+				<td style="text-align: center;">
+				  <img src="screenshot_2-9_22-1-38.png" width="400px"/>
+				  <figcaption>L_ZERO and P_LINEAR.</figcaption>
+				</td>
+			  </tr>
+			  <tr>
+				<td style="text-align: center;">
+				  <img src="screenshot_2-9_22-1-55.png" width="400px"/>
+				  <figcaption>L_NEAREST and P_NEAREST.</figcaption>
+				</td>
+				<td style="text-align: center;">
+				  <img src="screenshot_2-9_22-1-59.png" width="400px"/>
+				  <figcaption>L_NEAREST and P_LINEAR.</figcaption>
+				</td>
+			  </tr>
+			</table>
+		</div>
 
 
 		</div>
