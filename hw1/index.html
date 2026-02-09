@@ -27,16 +27,16 @@
 	</head>
 	<body>
 		<div class="container">
-		<h1>CS184/284A Spring 2025 Homework 1 Write-Up</h1>
+		<h1>CS184/284A Spring 2026 Homework 1 Write-Up</h1>
 		<div style="text-align: center;">Names: </div>
 
 		<br>
 
-		Link to webpage: (TODO) <a href="https://cs184.eecs.berkeley.edu/sp25">cs184.eecs.berkeley.edu/sp25</a>
+		Link to webpage: <a href="https://cal-cs184-student.github.io/hw-webpages-brandondone/">https://cal-cs184-student.github.io/hw-webpages-brandondone/</a>
 		
 		<br>
 
-		Link to GitHub repository: (TODO) <a href="https://cs184.eecs.berkeley.edu/sp25">cs184.eecs.berkeley.edu/sp25</a>
+		Link to GitHub repository: <a href="https://github.com/cal-cs184-student/hw-webpages-brandondone.git">https://github.com/cal-cs184-student/hw-webpages-brandondone.git</a>
 
 		<figure>
 			<img src="lion.jpg" alt="Lion" style="width:50%"/>
@@ -51,7 +51,19 @@
 		Give a high-level overview of what you implemented in this homework. Think about what you've built as a whole. Share your thoughts on what interesting things you've learned from completing the homework.
 
 		<h2>Task 1: Drawing Single-Color Triangles</h2>
-		Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+		Walkthrough
+
+		I rasterize each triangle by scanning row-by-row (per pixel y). For each scanline, I compute where that horizontal line intersects the triangle’s edges. Those intersections define a left/right x range. I then fill every pixel whose center (x+0.5, y+0.5) lies between those two x-intersections. This draws the triangle regardless of vertex winding order and includes boundary samples.
+		
+		Why it’s no worse than bounding‑box sampling
+
+		The bounding‑box method checks every pixel in the triangle’s bounding rectangle. My scanline approach only checks pixels that lie between the two edge intersections for each row, which is a subset of that bounding box. So it cannot be worse; it does strictly fewer checks when the triangle occupies a small portion of its bounding box.
+
+		Extra credit (optimizations + timing)My optimizations beyond naive bounding‑box testing are:
+		1. Span filling: For each scanline, compute just two intersections and fill a contiguous pixel span, instead of testing every pixel.
+		2. Incremental edge stepping: Precompute inv_dy per edge and increment intersection x per row to avoid repeated division.
+		3. Minimal math per pixel: No per‑pixel edge tests inside the span; just fill.
+
 
 		<p>Here is an example 2x2 gridlike structure using an HTML table. Each <b>tr</b> is a row and each <b>td</b> is a column in that row. You might find this useful for framing and showing your result images in an organized fashion.</p>
 		<div style="display: flex; flex-direction: column; align-items: center;">
@@ -94,19 +106,6 @@
 		<h2>Task 6: "Level Sampling" with mipmaps for texture mapping</h2>
 		Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
 
-		<h2>(Optional) Task 7: Extra Credit - Draw Something Creative!</h2>
-		Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-
-		<h2>Additional Notes (please remove)</h2>
-		<ul>
-			<li>You can also add code if you'd like as so: <code>code code code</code></li>
-			<li>If you'd like to add math equations, 
-				<ul>
-					<li>You can write inline equations like so: \( a^2 + b^2 = c^2 \)</li>
-					<li>You can write display equations like so: \[ a^2 + b^2 = c^2 \]</li>
-				</ul>
-			</li>
-		</ul>
 		</div>
 	</body>
 </html>
