@@ -48,12 +48,44 @@
 		-->
 
 		<h2>Overview</h2>
-		Give a high-level overview of what you implemented in this homework. Think about what you've built as a whole. Share your thoughts on what interesting things you've learned from completing the homework.
+		<p>
+			In this assignment, I implemented a full geometry-processing pipeline from parametric evaluation to mesh remeshing. I first implemented de Casteljau evaluation for Bezier curves and then extended it to Bezier surfaces using separable 1D evaluations. I then implemented area-weighted vertex normals for smooth shading, followed by core halfedge operations: edge flip (pointer rewiring only) and edge split (new vertex/edge/face/halfedge creation plus connectivity updates, including boundary support). Finally, I built Loop subdivision on top of those local operators by precomputing vertex/edge update positions, splitting original edges, flipping the appropriate new edges, and committing updated positions.
+		</p>
+		<p>
+			The most interesting lesson was how strongly mesh behavior depends on topology, not just geometry. Subdivision quality and symmetry are controlled by local connectivity patterns, so operations like pre-splitting or flipping can noticeably change final shape behavior. I also learned that robust mesh processing is mostly about maintaining strict halfedge invariants and update order: one incorrect pointer assignment can break traversal, while staged position updates and careful <code>isNew</code> bookkeeping make complex remeshing algorithms reliable.
+		</p>
 
 		<h2>Section I: Bezier Curves and Surfaces</h2>
 
 		<h3>Part 1: Bezier curves with 1D de Casteljau subdivision</h3>
-		Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+		<ol>
+			<li>
+				<p><strong>Briefly explain de Casteljau's algorithm and how you implemented it in order to evaluate Bezier curves.</strong></p>
+				<p>De Casteljau's algorithm evaluates a Bezier curve at parameter <code>t</code> by repeatedly linearly interpolating between neighboring control points.</p>
+				<p>At one step, if you have points <code>p0, p1, ..., pn</code>, you create the next level:
+				<code>p'i = (1 - t) * pi + t * p(i+1)</code> for <code>i = 0..n-1</code>.</p>
+				<p>You keep applying that same step to the newly generated points until only one point remains; that final point is the curve value at <code>t</code>.</p>
+				<p>In my implementation (<code>src/student_code.cpp:16</code>), <code>BezierCurve::evaluateStep(...)</code> performs exactly one subdivision level:</p>
+				<ul>
+					<li>loops through adjacent pairs in the input <code>points</code></li>
+					<li>computes <code>(1 - t) * points[i] + t * points[i + 1]</code></li>
+					<li><code>push_back</code>s each result into a new vector</li>
+					<li>returns that intermediate vector (size <code>n-1</code>)</li>
+				</ul>
+			</li>
+			<li>
+				<p><strong>Take a look at the provided <code>.bzc</code> files and create your own Bezier curve with <code>6</code> control points of your choosing. Use this Bezier curve for your screenshots below.</strong></p>
+				<p>Okay, I did this. It's called <code>curve3.bzc</code>.</p>
+			</li>
+			<li>
+				<p><strong>Show screenshots of each step / level of the evaluation from the original control points down to the final evaluated point. Press <code>E</code> to step through. Toggle <code>C</code> to show the completed Bezier curve as well.</strong></p>
+				<p>Okay, I took 6 screenshots.</p>
+			</li>
+			<li>
+				<p><strong>Show a screenshot of a slightly different Bezier curve by moving the original control points around and modifying the parameter <code>t</code> via mouse scrolling.</strong></p>
+				<p>Okay, I took 1 screenshot.</p>
+			</li>
+		</ol>
 
 		<p>Here is an example 2x2 gridlike structure using an HTML table. Each <b>tr</b> is a row and each <b>td</b> is a column in that row. You might find this useful for framing and showing your result images in an organized fashion.</p>
 		<div style="display: flex; flex-direction: column; align-items: center;">
@@ -82,35 +114,242 @@
 		</div>
 
 		<h3>Part 2: Bezier surfaces with separable 1D de Casteljau</h3>
-		Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+		<ol>
+			<li>
+				<p><strong>Briefly explain how de Casteljau algorithm extends to Bezier surfaces and how you implemented it in order to evaluate Bezier surfaces.</strong></p>
+				<p>For Bezier surfaces, de Casteljau is applied in two separable 1D passes:</p>
+				<ol>
+					<li>Evaluate each row of control points as a Bezier curve at <code>u</code>, producing one point per row.</li>
+					<li>Treat those resulting points as a new Bezier curve and evaluate it at <code>v</code>.</li>
+				</ol>
+				<p>The final point is the surface point at <code>(u, v)</code>.</p>
+				<p>Implementation in <code>src/student_code.cpp</code>:</p>
+				<ul>
+					<li><code>BezierPatch::evaluateStep</code> (<code>src/student_code.cpp:37</code>) does one interpolation level in 3D: <code>(1 - t) * points[i] + t * points[i+1]</code>.</li>
+					<li><code>BezierPatch::evaluate1D</code> (<code>src/student_code.cpp:57</code>) repeatedly calls <code>evaluateStep</code> until one point remains.</li>
+					<li><code>BezierPatch::evaluate</code> (<code>src/student_code.cpp:76</code>) evaluates each control-point row at <code>u</code>, stores those row results, then evaluates that list at <code>v</code>.</li>
+				</ul>
+			</li>
+			<li>
+				<p><strong>Show a screenshot of <code>bez/teapot.bez</code> (not <code>.dae</code>) evaluated by your implementation.</strong></p>
+				<p>Okay, I took 1 screenshot.</p>
+			</li>
+		</ol>
 
 		<h2>Section II: Triangle Meshes and Half-Edge Data Structure</h2>
 
 		<h3>Part 3: Area-weighted vertex normals</h3>
-		Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+		<ol>
+			<li>
+				<p><strong>Briefly explain how you implemented the area-weighted vertex normals.</strong></p>
+				<p>In <code>Vertex::normal()</code> (<code>src/student_code.cpp:89</code>), I:</p>
+				<ol>
+					<li>Start from one outgoing halfedge of the vertex and iterate around its one-ring using <code>h = h-&gt;twin()-&gt;next()</code>.</li>
+					<li>For each incident non-boundary face, get its three triangle vertices:
+						<ul>
+							<li><code>p0 = h-&gt;vertex()-&gt;position</code></li>
+							<li><code>p1 = h-&gt;next()-&gt;vertex()-&gt;position</code></li>
+							<li><code>p2 = h-&gt;next()-&gt;next()-&gt;vertex()-&gt;position</code></li>
+						</ul>
+					</li>
+					<li>Add <code>cross(p1 - p0, p2 - p0)</code> to an accumulator. This cross product is an area-weighted face normal.</li>
+					<li>After visiting all incident faces, return the normalized sum (<code>N.unit()</code>).</li>
+				</ol>
+				<p>So the result is the normalized area-weighted average of neighboring face normals.</p>
+			</li>
+			<li>
+				<p><strong>Show screenshots of <code>dae/teapot.dae</code> (not <code>.bez</code>) comparing teapot shading with and without vertex normals. Use <code>Q</code> to toggle default flat shading and Phong shading.</strong></p>
+				<p>Okay, I took 1 screenshot of without vertex normals / default flat shading. Then I took 1 screenshot of with vertex normals / Phong shading.</p>
+			</li>
+		</ol>
 
 		<h3>Part 4: Edge flip</h3>
-		Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-
-		<h3>Part 5: Edge split</h3>
-		Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-
-		<h3>Part 6: Loop subdivision for mesh upsampling</h3>
-		Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-
-		<h2>(Optional) Section III: Potential Extra Credit - Art Competition: Model something Creative</h2>
-		Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-
-		<h2>Additional Notes (please remove)</h2>
-		<ul>
-			<li>You can also add code if you'd like as so: <code>code code code</code></li>
-			<li>If you'd like to add math equations, 
+		<ol>
+			<li>
+				<p><strong>Briefly explain how you implemented the edge flip operation and describe any interesting implementation / debugging tricks you have used.</strong></p>
+				<p>In <code>HalfedgeMesh::flipEdge</code> (<code>src/student_code.cpp:112</code>), I implemented edge flip as a pure local pointer rewrite:</p>
+				<ol>
+					<li>Grab the 6 halfedges in the two incident triangles (<code>h0..h5</code>) and related vertices/edges/faces.</li>
+					<li>Early return if either adjacent face is boundary.</li>
+					<li>Rewire the 6 halfedges with <code>setNeighbors(...)</code> to represent the two new triangles after flip.</li>
+					<li>Update representative <code>halfedge()</code> pointers for affected edges/faces.</li>
+					<li>Update vertex <code>halfedge()</code> only when needed (if it was pointing to a halfedge whose root changed), then return <code>e0</code>.</li>
+				</ol>
+				<p>Interesting implementation/debugging tricks:</p>
 				<ul>
-					<li>You can write inline equations like so: \( a^2 + b^2 = c^2 \)</li>
-					<li>You can write display equations like so: \[ a^2 + b^2 = c^2 \]</li>
+					<li>I used a fixed naming/layout (<code>h0..h5</code>, <code>vA..vD</code>) matching the flip diagram to avoid pointer mixups.</li>
+					<li>I rewired all local halfedges explicitly in one block using <code>setNeighbors(...)</code>, which reduces partial-update bugs.</li>
+					<li>I added the boundary guard first, so invalid flips are no-ops.</li>
+					<li>I used a robustness tweak: avoid unnecessary vertex <code>halfedge()</code> reassignment, especially to preserve boundary conventions.</li>
+					<li>For debugging, <code>check_for(...)</code> in <code>halfEdgeMesh.h</code> is the best sanity tool to verify who points to what after a flip.</li>
 				</ul>
 			</li>
-		</ul>
+			<li>
+				<p><strong>Show screenshots of the teapot before and after some edge flips.</strong></p>
+				<p>Okay I took two screenshots but I took the after-edge-flips screenshot first.</p>
+			</li>
+			<li>
+				<p><strong>Write about your eventful debugging journey, if you have experienced one.</strong></p>
+				<p>Did not experience one.</p>
+			</li>
+		</ol>
+
+		<h3>Part 5: Edge split</h3>
+		<ol>
+			<li>
+				<p><strong>Briefly explain how you implemented the edge split operation and describe any interesting implementation / debugging tricks you have used.</strong></p>
+				<p>In <code>HalfedgeMesh::splitEdge</code> (<code>src/student_code.cpp:170</code>), I used a local connectivity rewrite approach similar to flip:</p>
+				<ol>
+					<li>Collect the local neighborhood (<code>h0..h5</code>, vertices, edges, faces) around the target edge.</li>
+					<li>Branch:
+						<ul>
+							<li>Interior edge: split two triangles into four.</li>
+							<li>Boundary edge (extra credit): split only the non-boundary triangle and update the boundary loop.</li>
+						</ul>
+					</li>
+					<li>Create only required new elements (<code>newVertex</code>, <code>newEdge</code>, <code>newFace</code>, <code>newHalfedge</code>).</li>
+					<li>Set the new vertex position to the midpoint of the original edge endpoints.</li>
+					<li>Reassign all local halfedge pointers with <code>setNeighbors(next, twin, vertex, edge, face)</code>.</li>
+					<li>Update representative <code>halfedge()</code> pointers for affected vertices/edges/faces.</li>
+					<li>Return the new midpoint vertex; its <code>halfedge()</code> is set on the original split edge.</li>
+				</ol>
+				<p>Useful implementation/debugging tricks I used:</p>
+				<ul>
+					<li>Fixed naming (<code>h0..h11</code>, <code>vA..vM</code>) to match the split diagram and avoid pointer mixups.</li>
+					<li>Wrote triangle cycles explicitly in comments before pointer rewiring.</li>
+					<li>Kept operations strictly local/constant-time, no mesh-wide traversal.</li>
+					<li>Preserved boundary conventions by handling boundary split in a dedicated path.</li>
+					<li>Use <code>check_for(...)</code> (in <code>halfEdgeMesh.h</code>) to verify pointer incidence if anything looks wrong after repeated <code>S</code>/<code>F</code> operations.</li>
+				</ul>
+			</li>
+			<li>
+				<p><strong>Show screenshots of a mesh before and after some edge splits.</strong></p>
+				<p>Okay, I took 2 screenshots.</p>
+			</li>
+			<li>
+				<p><strong>Show screenshots of a mesh before and after a combination of both edge splits and edge flips.</strong></p>
+				<p>Okay, I took 2 screenshots.</p>
+			</li>
+			<li>
+				<p><strong>Write about your eventful debugging journey, if you have experienced one.</strong></p>
+				<p>Did not experience one.</p>
+			</li>
+			<li>
+				<p><strong>If you have implemented support for boundary edges, show screenshots of your implementation properly handling split operations on boundary edges.</strong></p>
+				<p>Okay, I took 3 screenshots. The first one was no good.</p>
+			</li>
+		</ol>
+
+		<h3>Part 6: Loop subdivision for mesh upsampling</h3>
+		<ol>
+			<li>
+				<p><strong>Briefly explain how you implemented the loop subdivision and describe any interesting implementation / debugging tricks you have used.</strong></p>
+				<p>In <code>MeshResampler::upsample</code> (<code>src/student_code.cpp:323</code>), I implemented Loop subdivision in three stages:</p>
+				<p><strong>1. Precompute positions on the original mesh</strong></p>
+				<ul>
+					<li>Old vertices: store Loop-updated value in <code>Vertex::newPosition</code>.</li>
+					<li>Old edges: store midpoint vertex value in <code>Edge::newPosition</code> (<code>3/8, 1/8</code> rule for interior; midpoint for boundary extra credit).</li>
+					<li>Mark original vertices/edges with <code>isNew = false</code>.</li>
+				</ul>
+				<p><strong>2. Topology update (4-1 subdivision)</strong></p>
+				<ul>
+					<li>Cache original edges first, then split each once (avoids iterator invalidation/infinite splitting).</li>
+					<li>Mark each inserted midpoint vertex as <code>isNew = true</code>, and set its <code>newPosition</code> from the precomputed edge value.</li>
+					<li>Mark which resulting edges are new vs old.</li>
+				</ul>
+				<p><strong>3. Post-process connectivity + commit positions</strong></p>
+				<ul>
+					<li>Flip only edges that are <code>isNew</code> and connect one old vertex and one new vertex.</li>
+					<li>Copy all <code>newPosition</code> values into <code>Vertex::position</code>.</li>
+				</ul>
+				<p>Useful tricks:</p>
+				<ul>
+					<li>Staging all geometry in <code>newPosition</code> before changing topology keeps formulas based on original positions.</li>
+					<li>Caching original edges before splitting avoids dynamic-mesh traversal bugs.</li>
+					<li>Using <code>isNew</code> flags cleanly separates which edges to flip.</li>
+					<li>For debugging, repeated split/flip stress tests and <code>check_for(...)</code> pointer checks are the fastest way to catch connectivity mistakes.</li>
+				</ul>
+			</li>
+			<li>
+				<p><strong>Take some notes, as well as some screenshots, of your observations on how meshes behave after loop subdivision. What happens to sharp corners and edges? Can you reduce this effect by pre-splitting some edges?</strong></p>
+				<p><strong>Notes</strong></p>
+				<ul>
+					<li>After each Loop subdivision (<code>L</code>), the mesh gets smoother and more rounded.</li>
+					<li>Sharp corners are pulled inward and become less sharp.</li>
+					<li>Sharp edges turn into soft, curved transitions unless you add supporting topology.</li>
+					<li>The effect is strongest on coarse meshes with few triangles.</li>
+					<li>You can reduce corner/edge rounding by pre-splitting (<code>S</code>) edges near features you want to preserve, because extra nearby vertices constrain smoothing.</li>
+					<li>This does not keep edges perfectly sharp forever, but it significantly delays/weakens the rounding.</li>
+				</ul>
+				<p><strong>What to screenshot</strong></p>
+				<ol>
+					<li>A coarse model with obvious sharp features (best: <code>cube.dae</code>) before any subdivision.</li>
+					<li>Same view after 1 Loop subdivision (<code>L</code> once).</li>
+					<li>Same view after 2 Loop subdivisions (<code>L</code> twice total).</li>
+					<li>Reset/reload model. Pre-split several edges around one corner and along one edge loop (<code>S</code>), then screenshot before upsampling.</li>
+					<li>Same pre-split model after 1 Loop subdivision.</li>
+					<li>Same pre-split model after 1 Loop subdivision (rotated).</li>
+					<li>Same pre-split model after 2 Loop subdivisions (rotated).</li>
+				</ol>
+			</li>
+			<li>
+				<p><strong>Load <code>dae/cube.dae</code>. Perform several iterations of loop subdivision on the cube. Notice that the cube becomes slightly asymmetric after repeated subdivisions. Can you pre-process the cube with edge flips and splits so that the cube subdivides symmetrically? Document these effects and explain why they occur. Also explain how your pre-processing helps alleviate the effects.</strong></p>
+				<p>Yes. A good symmetric pre-process for <code>cube.dae</code> is:</p>
+				<ol>
+					<li>On each of the 6 cube faces, select the face's internal triangulation diagonal (the line across the square face).</li>
+					<li>Press <code>S</code> once on that diagonal (do this for all 6 faces).</li>
+					<li>If any face center fan looks skewed, use <code>F</code> locally to restore a clean 4-triangle fan around the new face-center vertex.</li>
+				</ol>
+				<p><strong>Why the asymmetry happens:</strong></p>
+				<ul>
+					<li>Loop subdivision depends on mesh connectivity, not just geometry.</li>
+					<li>The cube is triangulated with one diagonal per square face, and that diagonal pattern is not perfectly symmetric under all cube symmetries.</li>
+					<li>So vertices do not all have equivalent one-ring neighborhoods; subdivision weights differ slightly by location, which introduces directional bias after repeated <code>L</code>.</li>
+				</ul>
+				<p><strong>Why this pre-process helps:</strong></p>
+				<ul>
+					<li>Splitting each face diagonal inserts a center vertex per face and turns each square face into a symmetric 4-triangle fan.</li>
+					<li>This makes the 8 original cube corners topologically equivalent (same neighborhood structure), so they get updated more uniformly.</li>
+					<li>Result: repeated Loop subdivision stays much more symmetric and converges to a cleaner rounded-cube shape.</li>
+				</ul>
+				<p><strong>What to screenshot:</strong></p>
+				<ol>
+					<li>Original triangulated cube (show visible face diagonals).</li>
+					<li>Cube after several <code>L</code> (show asymmetry).</li>
+					<li>Pre-processed cube after splitting all 6 face diagonals (before <code>L</code>).</li>
+					<li>Pre-processed cube after same number of <code>L</code> steps from (2), same camera angle.</li>
+				</ol>
+			</li>
+			<li>
+				<p><strong>If you have implemented any extra credit extensions, explain what you did and document how they work with screenshots.</strong></p>
+				<p>I implemented the boundary-handling extra credit in two places:</p>
+				<p><strong>1. <code>HalfedgeMesh::splitEdge(...)</code> in <code>src/student_code.cpp:170</code></strong></p>
+				<ul>
+					<li>Added a boundary-edge branch.</li>
+					<li>If one adjacent face is boundary, it splits only the non-boundary triangle and updates the boundary loop connectivity.</li>
+					<li>New midpoint vertex is still placed at edge midpoint and returned.</li>
+				</ul>
+				<p><strong>2. <code>MeshResampler::upsample(...)</code> in <code>src/student_code.cpp:323</code></strong></p>
+				<ul>
+					<li>Added boundary Loop rules:</li>
+					<li>Boundary edge midpoint: <code>0.5 * (A + B)</code></li>
+					<li>Boundary old-vertex update: <code>0.75 * p + 0.125 * (neighbor1 + neighbor2)</code></li>
+					<li>Interior rules remain standard Loop weights.</li>
+				</ul>
+				<p><strong>How it works in practice:</strong></p>
+				<ul>
+					<li>Boundary meshes no longer break or get ignored when subdividing.</li>
+					<li>Boundary curves are smoothed in a controlled way while staying on/open along the boundary.</li>
+					<li>Interior behavior matches standard Loop subdivision.</li>
+				</ul>
+				<p><strong>Screenshots to document:</strong></p>
+				<ol>
+					<li>Pick a mesh with open boundary; select a boundary edge (<code>isBoundary() = true</code> in HUD) before split.</li>
+					<li>Same view of boundary mesh immediately after pressing <code>S</code> on that boundary edge (show successful split on boundary).</li>
+					<li>Same mesh after 2 <code>L</code> iterations, focused on boundary region.</li>
+				</ol>
+			</li>
+		</ol>
 		</div>
 	</body>
 </html>
