@@ -135,11 +135,11 @@
 				</ul>
 			</li>
 			<li>
-					<p><strong>Show a screenshot of <code>bez/teapot.bez</code> (not <code>.dae</code>) evaluated by your implementation.</strong></p>
-					<figure>
-						<img src="part2_2_1.png" alt="Teapot" style="width:50%"/>
-					</figure>
-				</li>
+				<p><strong>Show a screenshot of <code>bez/teapot.bez</code> (not <code>.dae</code>) evaluated by your implementation.</strong></p>
+				<figure>
+					<img src="part2_2_1.png" alt="Teapot" style="width:50%"/>
+				</figure>
+			</li>
 		</ol>
 
 		<h2>Section II: Triangle Meshes and Half-Edge Data Structure</h2>
@@ -353,58 +353,47 @@
 					<li>You can reduce corner/edge rounding by pre-splitting (<code>S</code>) edges near features you want to preserve, because extra nearby vertices constrain smoothing.</li>
 					<li>This does not keep edges perfectly sharp forever, but it significantly delays/weakens the rounding.</li>
 				</ul>
-				<p><strong>What to screenshot</strong></p>
-				<ol>
-					<li>A coarse model with obvious sharp features (best: <code>cube.dae</code>) before any subdivision.</li>
-					<li>Same view after 1 Loop subdivision (<code>L</code> once).</li>
-					<li>Same view after 2 Loop subdivisions (<code>L</code> twice total).</li>
-					<li>Reset/reload model. Pre-split several edges around one corner and along one edge loop (<code>S</code>), then screenshot before upsampling.</li>
-					<li>Same pre-split model after 1 Loop subdivision.</li>
-					<li>Same pre-split model after 1 Loop subdivision (rotated).</li>
-					<li>Same pre-split model after 2 Loop subdivisions (rotated).</li>
-				</ol>
-				<p>Example layout for 7 images.</p>
 				<div style="display: flex; flex-direction: column; align-items: center;">
 					<table style="width: 100%; text-align: center; border-collapse: collapse;">
 						<tr>
 							<td>
 								<img src="part6_2_1.png" width="400px"/>
-								<figcaption>Caption 1</figcaption>
+								<figcaption>cube.dae before any subdivision</figcaption>
 							</td>
 							<td>
 								<img src="part6_2_2.png" width="400px"/>
-								<figcaption>Caption 2</figcaption>
+								<figcaption>cube.dae after 1 Loop subdivision (L once)</figcaption>
 							</td>
 						</tr>
 						<tr>
 							<td>
 								<img src="part6_2_3.png" width="400px"/>
-								<figcaption>Caption 3</figcaption>
+								<figcaption>cube.dae after 2 Loop subdivision (L twice total)</figcaption>
 							</td>
 							<td>
 								<img src="part6_2_4.png" width="400px"/>
-								<figcaption>Caption 4</figcaption>
+								<figcaption>Reset cube.dae, with pre-split several edges around one corner and along one edge loop</figcaption>
 							</td>
 						</tr>
 						<tr>
 							<td>
 								<img src="part6_2_5.png" width="400px"/>
-								<figcaption>Caption 5</figcaption>
+								<figcaption>Same pre-split model after 1 Loop subdivision</figcaption>
 							</td>
 							<td>
 								<img src="part6_2_6.png" width="400px"/>
-								<figcaption>Caption 6</figcaption>
+								<figcaption>Same pre-split model after 1 Loop subdivision (rotated slightly for easier viewing of original corner)</figcaption>
 							</td>
 						</tr>
 						<tr>
 							<td colspan="2">
 								<img src="part6_2_7.png" width="400px"/>
-								<figcaption>Caption 7</figcaption>
+								<figcaption>Same pre-split model after 2 Loop subdivisions (remaining slightly rotated from previous step)</figcaption>
 							</td>
 						</tr>
 					</table>
 				</div>
-				</li>
+			</li>
 			<li>
 				<p><strong>Load <code>dae/cube.dae</code>. Perform several iterations of loop subdivision on the cube. Notice that the cube becomes slightly asymmetric after repeated subdivisions. Can you pre-process the cube with edge flips and splits so that the cube subdivides symmetrically? Document these effects and explain why they occur. Also explain how your pre-processing helps alleviate the effects.</strong></p>
 				<p>Yes. A good symmetric pre-process for <code>cube.dae</code> is:</p>
@@ -425,39 +414,31 @@
 					<li>This makes the 8 original cube corners topologically equivalent (same neighborhood structure), so they get updated more uniformly.</li>
 					<li>Result: repeated Loop subdivision stays much more symmetric and converges to a cleaner rounded-cube shape.</li>
 				</ul>
-				<p><strong>What to screenshot:</strong></p>
-				<ol>
-					<li>Original triangulated cube (show visible face diagonals).</li>
-					<li>Cube after several <code>L</code> (show asymmetry).</li>
-					<li>Pre-processed cube after splitting all 6 face diagonals (before <code>L</code>).</li>
-					<li>Pre-processed cube after same number of <code>L</code> steps from (2), same camera angle.</li>
-					</ol>
-					<p>Here is an example 2x2 gridlike structure using an HTML table. Each <b>tr</b> is a row and each <b>td</b> is a column in that row. You might find this useful for framing and showing your result images in an organized fashion.</p>
-					<div style="display: flex; flex-direction: column; align-items: center;">
-						<table style="width: 100%; text-align: center; border-collapse: collapse;">
-							<tr>
-								<td style="text-align: center;">
-									<img src="part6_3_1.png" width="400px"/>
-									<figcaption>Caption goes here.</figcaption>
-								</td>
-								<td style="text-align: center;">
-									<img src="part6_3_2.png" width="400px"/>
-									<figcaption>Caption goes here.</figcaption>
-								</td>
-							</tr>
-							<tr>
-								<td style="text-align: center;">
-									<img src="part6_3_3.png" width="400px"/>
-									<figcaption>Caption goes here.</figcaption>
-								</td>
-								<td style="text-align: center;">
-									<img src="part6_3_4.png" width="400px"/>
-									<figcaption>Caption goes here.</figcaption>
-								</td>
-							</tr>
-						</table>
-					</div>
-				</li>
+				<div style="display: flex; flex-direction: column; align-items: center;">
+					<table style="width: 100%; text-align: center; border-collapse: collapse;">
+						<tr>
+							<td style="text-align: center;">
+								<img src="part6_3_1.png" width="400px"/>
+								<figcaption>Original triangulated cube</figcaption>
+							</td>
+							<td style="text-align: center;">
+								<img src="part6_3_2.png" width="400px"/>
+								<figcaption>Cube after 3 L steps</figcaption>
+							</td>
+						</tr>
+						<tr>
+							<td style="text-align: center;">
+								<img src="part6_3_3.png" width="400px"/>
+								<figcaption>Pre-processed cube after splitting all 6 face diagonals</figcaption>
+							</td>
+							<td style="text-align: center;">
+								<img src="part6_3_4.png" width="400px"/>
+								<figcaption>Pre-processed cube after 3 L steps</figcaption>
+							</td>
+						</tr>
+					</table>
+				</div>
+			</li>
 			<li>
 				<p><strong>If you have implemented any extra credit extensions, explain what you did and document how they work with screenshots.</strong></p>
 				<p>I implemented the boundary-handling extra credit in two places:</p>
@@ -480,34 +461,27 @@
 					<li>Boundary curves are smoothed in a controlled way while staying on/open along the boundary.</li>
 					<li>Interior behavior matches standard Loop subdivision.</li>
 				</ul>
-				<p><strong>Screenshots to document:</strong></p>
-				<ol>
-					<li>Pick a mesh with open boundary; select a boundary edge (<code>isBoundary() = true</code> in HUD) before split.</li>
-					<li>Same view of boundary mesh immediately after pressing <code>S</code> on that boundary edge (show successful split on boundary).</li>
-					<li>Same mesh after 2 <code>L</code> iterations, focused on boundary region.</li>
-				</ol>
-				<p>Example layout for 3 images.</p>
 				<div style="display: flex; flex-direction: column; align-items: center;">
 					<table style="width: 100%; text-align: center; border-collapse: collapse;">
 						<tr>
 							<td style="text-align: center;">
 								<img src="part6_4_1.png" width="400px"/>
-								<figcaption>Caption 1</figcaption>
+								<figcaption>A boundary edge</figcaption>
 							</td>
 							<td style="text-align: center;">
 								<img src="part6_4_2.png" width="400px"/>
-								<figcaption>Caption 2</figcaption>
+								<figcaption>After pressing S on that boundary edge (successful split on boundary).</figcaption>
 							</td>
 						</tr>
 						<tr>
 							<td colspan="2" style="text-align: center;">
 								<img src="part6_4_3.png" width="400px"/>
-								<figcaption>Caption 3</figcaption>
+								<figcaption>Same mesh after 2 L iterations</figcaption>
 							</td>
 						</tr>
 					</table>
 				</div>
-				</li>
+			</li>
 		</ol>
 		</div>
 	</body>
