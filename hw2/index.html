@@ -38,11 +38,6 @@
 
 		Link to GitHub repository: <a href="https://github.com/cal-cs184-student/hw-webpages-brandondone.git">https://github.com/cal-cs184-student/hw-webpages-brandondone.git</a>
 
-		<figure>
-			<img src="teapot.png" alt="Teapot" style="width:50%"/>
-			<figcaption>You can add images with captions!</figcaption>
-		</figure>
-
 		<!--
 		We've already added one heading per part, to make your write-up as navigable when grading. Please fit your write-up within these sections!
 		-->
@@ -80,38 +75,51 @@
 			<li>
 				<p><strong>Show screenshots of each step / level of the evaluation from the original control points down to the final evaluated point. Press <code>E</code> to step through. Toggle <code>C</code> to show the completed Bezier curve as well.</strong></p>
 				<p>Okay, I took 6 screenshots.</p>
+				<p>Example layout for 6 images.</p>
+				<div style="display: flex; flex-direction: column; align-items: center;">
+					<table style="width: 100%; text-align: center; border-collapse: collapse;">
+						<tr>
+							<td>
+								<img src="img1.png" width="400px"/>
+								<figcaption>Caption 1</figcaption>
+							</td>
+							<td>
+								<img src="img2.png" width="400px"/>
+								<figcaption>Caption 2</figcaption>
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<img src="img3.png" width="400px"/>
+								<figcaption>Caption 3</figcaption>
+							</td>
+							<td>
+								<img src="img4.png" width="400px"/>
+								<figcaption>Caption 4</figcaption>
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<img src="img5.png" width="400px"/>
+								<figcaption>Caption 5</figcaption>
+							</td>
+							<td>
+								<img src="img6.png" width="400px"/>
+								<figcaption>Caption 6</figcaption>
+							</td>
+						</tr>
+					</table>
+				</div>
 			</li>
 			<li>
 				<p><strong>Show a screenshot of a slightly different Bezier curve by moving the original control points around and modifying the parameter <code>t</code> via mouse scrolling.</strong></p>
 				<p>Okay, I took 1 screenshot.</p>
+				<figure>
+					<img src="teapot.png" alt="Teapot" style="width:50%"/>
+					<figcaption>You can add images with captions!</figcaption>
+				</figure>
 			</li>
 		</ol>
-
-		<p>Here is an example 2x2 gridlike structure using an HTML table. Each <b>tr</b> is a row and each <b>td</b> is a column in that row. You might find this useful for framing and showing your result images in an organized fashion.</p>
-		<div style="display: flex; flex-direction: column; align-items: center;">
-			<table style="width: 100%; text-align: center; border-collapse: collapse;">
-			  <tr>
-				<td style="text-align: center;">
-				  <img src="teapot.png" width="400px"/>
-				  <figcaption>Caption goes here.</figcaption>
-				</td>
-				<td style="text-align: center;">
-				  <img src="teapot.png" width="400px"/>
-				  <figcaption>Caption goes here.</figcaption>
-				</td>
-			  </tr>
-			  <tr>
-				<td style="text-align: center;">
-				  <img src="teapot.png" width="400px"/>
-				  <figcaption>Caption goes here.</figcaption>
-				</td>
-				<td style="text-align: center;">
-				  <img src="teapot.png" width="400px"/>
-				  <figcaption>Caption goes here.</figcaption>
-				</td>
-			  </tr>
-			</table>
-		</div>
 
 		<h3>Part 2: Bezier surfaces with separable 1D de Casteljau</h3>
 		<ol>
@@ -131,9 +139,13 @@
 				</ul>
 			</li>
 			<li>
-				<p><strong>Show a screenshot of <code>bez/teapot.bez</code> (not <code>.dae</code>) evaluated by your implementation.</strong></p>
-				<p>Okay, I took 1 screenshot.</p>
-			</li>
+					<p><strong>Show a screenshot of <code>bez/teapot.bez</code> (not <code>.dae</code>) evaluated by your implementation.</strong></p>
+					<p>Okay, I took 1 screenshot.</p>
+					<figure>
+						<img src="teapot.png" alt="Teapot" style="width:50%"/>
+						<figcaption>You can add images with captions!</figcaption>
+					</figure>
+				</li>
 		</ol>
 
 		<h2>Section II: Triangle Meshes and Half-Edge Data Structure</h2>
@@ -160,6 +172,23 @@
 			<li>
 				<p><strong>Show screenshots of <code>dae/teapot.dae</code> (not <code>.bez</code>) comparing teapot shading with and without vertex normals. Use <code>Q</code> to toggle default flat shading and Phong shading.</strong></p>
 				<p>Okay, I took 1 screenshot of without vertex normals / default flat shading. Then I took 1 screenshot of with vertex normals / Phong shading.</p>
+				<p>Example layout for 2 images (stacked).</p>
+				<div style="display: flex; flex-direction: column; align-items: center;">
+					<table style="width: 100%; text-align: center; border-collapse: collapse;">
+						<tr>
+							<td>
+								<img src="img1.png" width="400px"/>
+								<figcaption>Caption 1</figcaption>
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<img src="img2.png" width="400px"/>
+								<figcaption>Caption 2</figcaption>
+							</td>
+						</tr>
+					</table>
+				</div>
 			</li>
 		</ol>
 
@@ -187,6 +216,23 @@
 			<li>
 				<p><strong>Show screenshots of the teapot before and after some edge flips.</strong></p>
 				<p>Okay I took two screenshots but I took the after-edge-flips screenshot first.</p>
+				<p>Example layout for 2 images (stacked).</p>
+				<div style="display: flex; flex-direction: column; align-items: center;">
+					<table style="width: 100%; text-align: center; border-collapse: collapse;">
+						<tr>
+							<td>
+								<img src="img1.png" width="400px"/>
+								<figcaption>Caption 1</figcaption>
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<img src="img2.png" width="400px"/>
+								<figcaption>Caption 2</figcaption>
+							</td>
+						</tr>
+					</table>
+				</div>
 			</li>
 			<li>
 				<p><strong>Write about your eventful debugging journey, if you have experienced one.</strong></p>
@@ -225,10 +271,44 @@
 			<li>
 				<p><strong>Show screenshots of a mesh before and after some edge splits.</strong></p>
 				<p>Okay, I took 2 screenshots.</p>
+				<p>Example layout for 2 images (stacked).</p>
+				<div style="display: flex; flex-direction: column; align-items: center;">
+					<table style="width: 100%; text-align: center; border-collapse: collapse;">
+						<tr>
+							<td>
+								<img src="img1.png" width="400px"/>
+								<figcaption>Caption 1</figcaption>
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<img src="img2.png" width="400px"/>
+								<figcaption>Caption 2</figcaption>
+							</td>
+						</tr>
+					</table>
+				</div>
 			</li>
 			<li>
 				<p><strong>Show screenshots of a mesh before and after a combination of both edge splits and edge flips.</strong></p>
 				<p>Okay, I took 2 screenshots.</p>
+				<p>Example layout for 2 images (stacked).</p>
+				<div style="display: flex; flex-direction: column; align-items: center;">
+					<table style="width: 100%; text-align: center; border-collapse: collapse;">
+						<tr>
+							<td>
+								<img src="img1.png" width="400px"/>
+								<figcaption>Caption 1</figcaption>
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<img src="img2.png" width="400px"/>
+								<figcaption>Caption 2</figcaption>
+							</td>
+						</tr>
+					</table>
+				</div>
 			</li>
 			<li>
 				<p><strong>Write about your eventful debugging journey, if you have experienced one.</strong></p>
@@ -237,6 +317,23 @@
 			<li>
 				<p><strong>If you have implemented support for boundary edges, show screenshots of your implementation properly handling split operations on boundary edges.</strong></p>
 				<p>Okay, I took 3 screenshots. The first one was no good.</p>
+				<p>Example layout for 2 images (stacked).</p>
+				<div style="display: flex; flex-direction: column; align-items: center;">
+					<table style="width: 100%; text-align: center; border-collapse: collapse;">
+						<tr>
+							<td>
+								<img src="img1.png" width="400px"/>
+								<figcaption>Caption 1</figcaption>
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<img src="img2.png" width="400px"/>
+								<figcaption>Caption 2</figcaption>
+							</td>
+						</tr>
+					</table>
+				</div>
 			</li>
 		</ol>
 
@@ -291,7 +388,48 @@
 					<li>Same pre-split model after 1 Loop subdivision (rotated).</li>
 					<li>Same pre-split model after 2 Loop subdivisions (rotated).</li>
 				</ol>
-			</li>
+				<p>Example layout for 7 images.</p>
+				<div style="display: flex; flex-direction: column; align-items: center;">
+					<table style="width: 100%; text-align: center; border-collapse: collapse;">
+						<tr>
+							<td>
+								<img src="img1.png" width="400px"/>
+								<figcaption>Caption 1</figcaption>
+							</td>
+							<td>
+								<img src="img2.png" width="400px"/>
+								<figcaption>Caption 2</figcaption>
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<img src="img3.png" width="400px"/>
+								<figcaption>Caption 3</figcaption>
+							</td>
+							<td>
+								<img src="img4.png" width="400px"/>
+								<figcaption>Caption 4</figcaption>
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<img src="img5.png" width="400px"/>
+								<figcaption>Caption 5</figcaption>
+							</td>
+							<td>
+								<img src="img6.png" width="400px"/>
+								<figcaption>Caption 6</figcaption>
+							</td>
+						</tr>
+						<tr>
+							<td colspan="2">
+								<img src="img7.png" width="400px"/>
+								<figcaption>Caption 7</figcaption>
+							</td>
+						</tr>
+					</table>
+				</div>
+				</li>
 			<li>
 				<p><strong>Load <code>dae/cube.dae</code>. Perform several iterations of loop subdivision on the cube. Notice that the cube becomes slightly asymmetric after repeated subdivisions. Can you pre-process the cube with edge flips and splits so that the cube subdivides symmetrically? Document these effects and explain why they occur. Also explain how your pre-processing helps alleviate the effects.</strong></p>
 				<p>Yes. A good symmetric pre-process for <code>cube.dae</code> is:</p>
@@ -318,8 +456,33 @@
 					<li>Cube after several <code>L</code> (show asymmetry).</li>
 					<li>Pre-processed cube after splitting all 6 face diagonals (before <code>L</code>).</li>
 					<li>Pre-processed cube after same number of <code>L</code> steps from (2), same camera angle.</li>
-				</ol>
-			</li>
+					</ol>
+					<p>Here is an example 2x2 gridlike structure using an HTML table. Each <b>tr</b> is a row and each <b>td</b> is a column in that row. You might find this useful for framing and showing your result images in an organized fashion.</p>
+					<div style="display: flex; flex-direction: column; align-items: center;">
+						<table style="width: 100%; text-align: center; border-collapse: collapse;">
+							<tr>
+								<td style="text-align: center;">
+									<img src="teapot.png" width="400px"/>
+									<figcaption>Caption goes here.</figcaption>
+								</td>
+								<td style="text-align: center;">
+									<img src="teapot.png" width="400px"/>
+									<figcaption>Caption goes here.</figcaption>
+								</td>
+							</tr>
+							<tr>
+								<td style="text-align: center;">
+									<img src="teapot.png" width="400px"/>
+									<figcaption>Caption goes here.</figcaption>
+								</td>
+								<td style="text-align: center;">
+									<img src="teapot.png" width="400px"/>
+									<figcaption>Caption goes here.</figcaption>
+								</td>
+							</tr>
+						</table>
+					</div>
+				</li>
 			<li>
 				<p><strong>If you have implemented any extra credit extensions, explain what you did and document how they work with screenshots.</strong></p>
 				<p>I implemented the boundary-handling extra credit in two places:</p>
@@ -348,7 +511,28 @@
 					<li>Same view of boundary mesh immediately after pressing <code>S</code> on that boundary edge (show successful split on boundary).</li>
 					<li>Same mesh after 2 <code>L</code> iterations, focused on boundary region.</li>
 				</ol>
-			</li>
+				<p>Example layout for 3 images.</p>
+				<div style="display: flex; flex-direction: column; align-items: center;">
+					<table style="width: 100%; text-align: center; border-collapse: collapse;">
+						<tr>
+							<td style="text-align: center;">
+								<img src="teapot1.png" width="400px"/>
+								<figcaption>Caption 1</figcaption>
+							</td>
+							<td style="text-align: center;">
+								<img src="teapot2.png" width="400px"/>
+								<figcaption>Caption 2</figcaption>
+							</td>
+						</tr>
+						<tr>
+							<td colspan="2" style="text-align: center;">
+								<img src="teapot3.png" width="400px"/>
+								<figcaption>Caption 3</figcaption>
+							</td>
+						</tr>
+					</table>
+				</div>
+				</li>
 		</ol>
 		</div>
 	</body>
