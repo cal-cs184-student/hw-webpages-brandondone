@@ -188,6 +188,23 @@
 			.stats-table td {
 				background: rgba(255, 253, 248, 0.92);
 			}
+
+			.meta-card {
+				margin: 20px 0 28px;
+				padding: 18px 20px;
+				background: var(--card-bg);
+				border: 1px solid var(--border);
+				border-radius: 16px;
+				box-shadow: 0 14px 35px rgba(90, 68, 44, 0.08);
+			}
+
+			.meta-card p {
+				margin-bottom: 8px;
+			}
+
+			.meta-card p:last-child {
+				margin-bottom: 0;
+			}
 		</style>
 	</head>
 	<body>
@@ -195,13 +212,10 @@
 		<h1>CS184 Spring 2026 Homework 3 Write-Up</h1>
 		<div style="text-align: center;">Name: Brandon Done</div>
 
-		<br>
-
-		Link to webpage: <a href="https://cal-cs184-student.github.io/hw-webpages-brandondone/">https://cal-cs184-student.github.io/hw-webpages-brandondone/</a>
-
-		<br>
-
-		Link to GitHub repository: <a href="https://github.com/cal-cs184-student/hw-webpages-brandondone.git">https://github.com/cal-cs184-student/hw-webpages-brandondone.git</a>
+		<div class="meta-card">
+			<p>Link to webpage: <a href="https://cal-cs184-student.github.io/hw-webpages-brandondone/">https://cal-cs184-student.github.io/hw-webpages-brandondone/</a></p>
+			<p>Link to GitHub repository: <a href="https://github.com/cal-cs184-student/hw-webpages-brandondone.git">https://github.com/cal-cs184-student/hw-webpages-brandondone.git</a></p>
+		</div>
 
 		<h2>Overview</h2>
 		<p>
@@ -702,11 +716,17 @@
 				<div class="answer-block">
 					<div class="screenshot-grid">
 						<div class="screenshot-slot"><strong><code>-m 0</code> Accumulated</strong><img src="CBbunny_m0_accum_1024spp.png" alt="CBbunny accumulated bounce m0"/><code>CBbunny_m0_accum_1024spp.png</code></div>
+						<div class="screenshot-slot"><strong><code>-m 0</code> Unaccumulated</strong><img src="CBbunny_m0_noaccum_1024spp.png" alt="CBbunny unaccumulated bounce m0"/><code>CBbunny_m0_noaccum_1024spp.png</code></div>
 						<div class="screenshot-slot"><strong><code>-m 1</code> Accumulated</strong><img src="CBbunny_m1_accum_1024spp.png" alt="CBbunny accumulated bounce m1"/><code>CBbunny_m1_accum_1024spp.png</code></div>
+						<div class="screenshot-slot"><strong><code>-m 1</code> Unaccumulated</strong><img src="CBbunny_m1_noaccum_1024spp.png" alt="CBbunny unaccumulated bounce m1"/><code>CBbunny_m1_noaccum_1024spp.png</code></div>
 						<div class="screenshot-slot"><strong><code>-m 2</code> Accumulated</strong><img src="CBbunny_m2_accum_1024spp.png" alt="CBbunny accumulated bounce m2"/><code>CBbunny_m2_accum_1024spp.png</code></div>
+						<div class="screenshot-slot"><strong><code>-m 2</code> Unaccumulated</strong><img src="CBbunny_m2_noaccum_1024spp.png" alt="CBbunny unaccumulated bounce m2"/><code>CBbunny_m2_noaccum_1024spp.png</code></div>
 						<div class="screenshot-slot"><strong><code>-m 3</code> Accumulated</strong><img src="CBbunny_m3_accum_1024spp.png" alt="CBbunny accumulated bounce m3"/><code>CBbunny_m3_accum_1024spp.png</code></div>
+						<div class="screenshot-slot"><strong><code>-m 3</code> Unaccumulated</strong><img src="CBbunny_m3_noaccum_1024spp.png" alt="CBbunny unaccumulated bounce m3"/><code>CBbunny_m3_noaccum_1024spp.png</code></div>
 						<div class="screenshot-slot"><strong><code>-m 4</code> Accumulated</strong><img src="CBbunny_m4_accum_1024spp.png" alt="CBbunny accumulated bounce m4"/><code>CBbunny_m4_accum_1024spp.png</code></div>
+						<div class="screenshot-slot"><strong><code>-m 4</code> Unaccumulated</strong><img src="CBbunny_m4_noaccum_1024spp.png" alt="CBbunny unaccumulated bounce m4"/><code>CBbunny_m4_noaccum_1024spp.png</code></div>
 						<div class="screenshot-slot"><strong><code>-m 5</code> Accumulated</strong><img src="CBbunny_m5_accum_1024spp.png" alt="CBbunny accumulated bounce m5"/><code>CBbunny_m5_accum_1024spp.png</code></div>
+						<div class="screenshot-slot"><strong><code>-m 5</code> Unaccumulated</strong><img src="CBbunny_m5_noaccum_1024spp.png" alt="CBbunny unaccumulated bounce m5"/><code>CBbunny_m5_noaccum_1024spp.png</code></div>
 					</div>
 				</div>
 			</li>
@@ -794,12 +814,12 @@
 							<code>CBbunny_adaptive_2048.png</code>
 						</div>
 						<div class="screenshot-slot">
-							<img src="CBlucy_adaptive_2048_rate.png" alt="Adaptive sampling rate image for CBlucy"/>
-							<code>CBlucy_adaptive_2048_rate.png</code>
+							<img src="CBspheres_lambertian_adaptive_2048_rate.png" alt="Adaptive sampling rate image for CBspheres_lambertian"/>
+							<code>CBspheres_lambertian_adaptive_2048_rate.png</code>
 						</div>
 						<div class="screenshot-slot">
-							<img src="CBlucy_adaptive_2048.png" alt="Adaptive sampling final render for CBlucy"/>
-							<code>CBlucy_adaptive_2048.png</code>
+							<img src="CBspheres_lambertian_adaptive_2048.png" alt="Adaptive sampling final render for CBspheres_lambertian"/>
+							<code>CBspheres_lambertian_adaptive_2048.png</code>
 						</div>
 					</div>
 				</div>
