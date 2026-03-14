@@ -151,6 +151,20 @@
 				color: var(--accent);
 			}
 
+			.screenshot-slot img {
+				display: block;
+				width: 100%;
+				height: auto;
+				margin: 10px 0 10px;
+				border-radius: 10px;
+				box-shadow: 0 10px 24px rgba(90, 68, 44, 0.12);
+			}
+
+			.screenshot-slot code {
+				display: inline-block;
+				margin-top: 4px;
+			}
+
 			.stats-table {
 				width: 100%;
 				margin-top: 14px;
@@ -323,22 +337,21 @@
 			<li>
 				<span class="prompt">Show images with normal shading for a few small <code>.dae</code> files.</span>
 				<div class="answer-block">
-					<p>
-						I have three normal-shaded renders prepared for this part. The layout below gives me a clean
-						place to drop those screenshots into the page as I add them.
-					</p>
 					<div class="screenshot-grid">
 						<div class="screenshot-slot">
 							<strong>Render 1</strong>
-							Add a small <code>.dae</code> normal-shading screenshot here.
+							<img src="pt1_banana.png" alt="Normal shading render of banana scene"/>
+							<code>pt1_banana.png</code>
 						</div>
 						<div class="screenshot-slot">
 							<strong>Render 2</strong>
-							Add a second normal-shading screenshot here.
+							<img src="pt1_cube.png" alt="Normal shading render of cube scene"/>
+							<code>pt1_cube.png</code>
 						</div>
 						<div class="screenshot-slot">
 							<strong>Render 3</strong>
-							Add a third normal-shading screenshot here.
+							<img src="pt1_plane.png" alt="Normal shading render of plane scene"/>
+							<code>pt1_plane.png</code>
 						</div>
 					</div>
 				</div>
@@ -392,22 +405,21 @@
 			<li>
 				<span class="prompt">Show images with normal shading for a few large <code>.dae</code> files that you can only render with BVH acceleration.</span>
 				<div class="answer-block">
-					<p>
-						I have three large-scene normal-shading renders ready for this part. I left a clean gallery
-						below so they can be dropped in as soon as the image files are added.
-					</p>
 					<div class="screenshot-grid">
 						<div class="screenshot-slot">
 							<strong>Large Scene 1</strong>
-							Add the first BVH-only normal-shading render here.
+							<img src="pt2_cbdragon.png" alt="BVH render of CBdragon"/>
+							<code>pt2_cbdragon.png</code>
 						</div>
 						<div class="screenshot-slot">
 							<strong>Large Scene 2</strong>
-							Add the second BVH-only normal-shading render here.
+							<img src="pt2_cblucy.png" alt="BVH render of CBlucy"/>
+							<code>pt2_cblucy.png</code>
 						</div>
 						<div class="screenshot-slot">
 							<strong>Large Scene 3</strong>
-							Add the third BVH-only normal-shading render here.
+							<img src="pt2_walle.png" alt="BVH render of walle"/>
+							<code>pt2_walle.png</code>
 						</div>
 					</div>
 				</div>
@@ -529,26 +541,22 @@
 			<li>
 				<span class="prompt">Show some images rendered with both implementations of the direct lighting function.</span>
 				<div class="answer-block">
-					<p>
-						I saved four comparison renders for this part using <code>CBspheres</code> and
-						<code>CBbunny</code>. The gallery below gives me a clean place to drop in the final images.
-					</p>
 					<div class="screenshot-grid">
 						<div class="screenshot-slot">
-							<strong>CBspheres, Hemisphere</strong>
-							Add the uniform hemisphere render here.
+							<img src="CBspheres_direct_hemisphere.png" alt="CBspheres rendered with hemisphere sampling"/>
+							<code>CBspheres_direct_hemisphere.png</code>
 						</div>
 						<div class="screenshot-slot">
-							<strong>CBspheres, Light Sampling</strong>
-							Add the light-sampled render here.
+							<img src="CBspheres_direct_importance.png" alt="CBspheres rendered with light importance sampling"/>
+							<code>CBspheres_direct_importance.png</code>
 						</div>
 						<div class="screenshot-slot">
-							<strong>CBbunny, Hemisphere</strong>
-							Add the uniform hemisphere render here.
+							<img src="CBbunny_direct_hemisphere.png" alt="CBbunny rendered with hemisphere sampling"/>
+							<code>CBbunny_direct_hemisphere.png</code>
 						</div>
 						<div class="screenshot-slot">
-							<strong>CBbunny, Light Sampling</strong>
-							Add the light-sampled render here.
+							<img src="CBbunny_direct_importance.png" alt="CBbunny rendered with light importance sampling"/>
+							<code>CBbunny_direct_importance.png</code>
 						</div>
 					</div>
 				</div>
@@ -556,27 +564,26 @@
 			<li>
 				<span class="prompt">Focus on one particular scene with at least one area light and compare the noise levels in soft shadows when rendering with 1, 4, 16, and 64 light rays and with 1 sample per pixel using light sampling.</span>
 				<div class="answer-block">
-					<p>
-						I saved the <code>CBbunny</code> soft-shadow noise comparison renders for
-						<code>-l 1</code>, <code>-l 4</code>, <code>-l 16</code>, and <code>-l 64</code>. This
-						layout is ready for those four screenshots.
-					</p>
 					<div class="screenshot-grid">
 						<div class="screenshot-slot">
 							<strong><code>-l 1</code></strong>
-							Add the 1-light-ray render here.
+							<img src="CBbunny_noise_s1_l1.png" alt="CBbunny soft shadow noise at 1 light ray"/>
+							<code>CBbunny_noise_s1_l1.png</code>
 						</div>
 						<div class="screenshot-slot">
 							<strong><code>-l 4</code></strong>
-							Add the 4-light-ray render here.
+							<img src="CBbunny_noise_s1_l4.png" alt="CBbunny soft shadow noise at 4 light rays"/>
+							<code>CBbunny_noise_s1_l4.png</code>
 						</div>
 						<div class="screenshot-slot">
 							<strong><code>-l 16</code></strong>
-							Add the 16-light-ray render here.
+							<img src="CBbunny_noise_s1_l16.png" alt="CBbunny soft shadow noise at 16 light rays"/>
+							<code>CBbunny_noise_s1_l16.png</code>
 						</div>
 						<div class="screenshot-slot">
 							<strong><code>-l 64</code></strong>
-							Add the 64-light-ray render here.
+							<img src="CBbunny_noise_s1_l64.png" alt="CBbunny soft shadow noise at 64 light rays"/>
+							<code>CBbunny_noise_s1_l64.png</code>
 						</div>
 					</div>
 				</div>
@@ -638,21 +645,18 @@
 				<span class="prompt">Show some images rendered with global (direct and indirect) illumination. Use 1024 samples per pixel.</span>
 				<div class="answer-block">
 					<p>
-						I left a clean gallery here for the 1024-spp global-illumination renders once the image files
-						are dropped in.
+						Render settings used: -s 1024 -l 4 -m 5 -o 1 -r 320 240 (importance light sampling, GI enabled).
 					</p>
 					<div class="screenshot-grid">
 						<div class="screenshot-slot">
 							<strong>GI Render 1</strong>
-							Add a global illumination image here.
+							<img src="CBbunny_gi_1024spp.png" alt="CBbunny global illumination render"/>
+							<code>CBbunny_gi_1024spp.png</code>
 						</div>
 						<div class="screenshot-slot">
 							<strong>GI Render 2</strong>
-							Add a second global illumination image here.
-						</div>
-						<div class="screenshot-slot">
-							<strong>GI Render 3</strong>
-							Add a third global illumination image here.
+							<img src="CBspheres_gi_1024spp.png" alt="CBspheres global illumination render"/>
+							<code>CBspheres_gi_1024spp.png</code>
 						</div>
 					</div>
 				</div>
@@ -660,19 +664,16 @@
 			<li>
 				<span class="prompt">Pick one scene and compare rendered views first with only direct illumination, then only indirect illumination. Use 1024 samples per pixel.</span>
 				<div class="answer-block">
-					<p>
-						This comparison section is ready for the two 1024-spp renders after editing
-						<code>PathTracer::at_least_one_bounce_radiance(...)</code> to isolate the direct-only and
-						indirect-only views.
-					</p>
 					<div class="screenshot-grid">
 						<div class="screenshot-slot">
 							<strong>Direct Only</strong>
-							Add the direct-illumination-only render here.
+							<img src="CBbunny_direct_only_1024spp.png" alt="CBbunny with direct illumination only"/>
+							<code>CBbunny_direct_only_1024spp.png</code>
 						</div>
 						<div class="screenshot-slot">
 							<strong>Indirect Only</strong>
-							Add the indirect-illumination-only render here.
+							<img src="CBbunny_indirect_only_1024spp.png" alt="CBbunny with indirect illumination only"/>
+							<code>CBbunny_indirect_only_1024spp.png</code>
 						</div>
 					</div>
 				</div>
@@ -680,17 +681,13 @@
 			<li>
 				<span class="prompt">For <code>CBbunny.dae</code>, render the mth bounce of light with <code>max_ray_depth</code> set to 0, 1, 2, 3, 4, and 5, and <code>isAccumBounces = false</code>. Explain what you see for the 2nd and 3rd bounce of light.</span>
 				<div class="answer-block">
-					<p>
-						The image grid below is ready for the six unaccumulated bounce renders of
-						<code>CBbunny.dae</code>.
-					</p>
 					<div class="screenshot-grid">
-						<div class="screenshot-slot"><strong><code>-m 0</code></strong>Add the 0-bounce image here.</div>
-						<div class="screenshot-slot"><strong><code>-m 1</code></strong>Add the 1-bounce image here.</div>
-						<div class="screenshot-slot"><strong><code>-m 2</code></strong>Add the 2-bounce image here.</div>
-						<div class="screenshot-slot"><strong><code>-m 3</code></strong>Add the 3-bounce image here.</div>
-						<div class="screenshot-slot"><strong><code>-m 4</code></strong>Add the 4-bounce image here.</div>
-						<div class="screenshot-slot"><strong><code>-m 5</code></strong>Add the 5-bounce image here.</div>
+						<div class="screenshot-slot"><strong><code>-m 0</code></strong><img src="CBbunny_m0_noaccum_1024spp.png" alt="CBbunny unaccumulated bounce m0"/><code>CBbunny_m0_noaccum_1024spp.png</code></div>
+						<div class="screenshot-slot"><strong><code>-m 1</code></strong><img src="CBbunny_m1_noaccum_1024spp.png" alt="CBbunny unaccumulated bounce m1"/><code>CBbunny_m1_noaccum_1024spp.png</code></div>
+						<div class="screenshot-slot"><strong><code>-m 2</code></strong><img src="CBbunny_m2_noaccum_1024spp.png" alt="CBbunny unaccumulated bounce m2"/><code>CBbunny_m2_noaccum_1024spp.png</code></div>
+						<div class="screenshot-slot"><strong><code>-m 3</code></strong><img src="CBbunny_m3_noaccum_1024spp.png" alt="CBbunny unaccumulated bounce m3"/><code>CBbunny_m3_noaccum_1024spp.png</code></div>
+						<div class="screenshot-slot"><strong><code>-m 4</code></strong><img src="CBbunny_m4_noaccum_1024spp.png" alt="CBbunny unaccumulated bounce m4"/><code>CBbunny_m4_noaccum_1024spp.png</code></div>
+						<div class="screenshot-slot"><strong><code>-m 5</code></strong><img src="CBbunny_m5_noaccum_1024spp.png" alt="CBbunny unaccumulated bounce m5"/><code>CBbunny_m5_noaccum_1024spp.png</code></div>
 					</div>
 				</div>
 				<div class="answer-block">
@@ -711,13 +708,13 @@
 			<li>
 				<span class="prompt">Compare rendered views of accumulated and unaccumulated bounces for <code>CBbunny.dae</code> with <code>max_ray_depth</code> set to 0, 1, 2, 3, 4, and 5.</span>
 				<div class="answer-block">
-					<p>
-						I set this up as another gallery so the accumulated and unaccumulated bounce comparisons can
-						be added cleanly.
-					</p>
 					<div class="screenshot-grid">
-						<div class="screenshot-slot"><strong>Accumulated</strong>Add the accumulated-bounce comparison here.</div>
-						<div class="screenshot-slot"><strong>Unaccumulated</strong>Add the unaccumulated-bounce comparison here.</div>
+						<div class="screenshot-slot"><strong><code>-m 0</code> Accumulated</strong><img src="CBbunny_m0_accum_1024spp.png" alt="CBbunny accumulated bounce m0"/><code>CBbunny_m0_accum_1024spp.png</code></div>
+						<div class="screenshot-slot"><strong><code>-m 1</code> Accumulated</strong><img src="CBbunny_m1_accum_1024spp.png" alt="CBbunny accumulated bounce m1"/><code>CBbunny_m1_accum_1024spp.png</code></div>
+						<div class="screenshot-slot"><strong><code>-m 2</code> Accumulated</strong><img src="CBbunny_m2_accum_1024spp.png" alt="CBbunny accumulated bounce m2"/><code>CBbunny_m2_accum_1024spp.png</code></div>
+						<div class="screenshot-slot"><strong><code>-m 3</code> Accumulated</strong><img src="CBbunny_m3_accum_1024spp.png" alt="CBbunny accumulated bounce m3"/><code>CBbunny_m3_accum_1024spp.png</code></div>
+						<div class="screenshot-slot"><strong><code>-m 4</code> Accumulated</strong><img src="CBbunny_m4_accum_1024spp.png" alt="CBbunny accumulated bounce m4"/><code>CBbunny_m4_accum_1024spp.png</code></div>
+						<div class="screenshot-slot"><strong><code>-m 5</code> Accumulated</strong><img src="CBbunny_m5_accum_1024spp.png" alt="CBbunny accumulated bounce m5"/><code>CBbunny_m5_accum_1024spp.png</code></div>
 					</div>
 				</div>
 			</li>
@@ -728,12 +725,12 @@
 						This section is ready for the Russian Roulette comparison renders.
 					</p>
 					<div class="screenshot-grid">
-						<div class="screenshot-slot"><strong><code>-m 0</code></strong>Add the image here.</div>
-						<div class="screenshot-slot"><strong><code>-m 1</code></strong>Add the image here.</div>
-						<div class="screenshot-slot"><strong><code>-m 2</code></strong>Add the image here.</div>
-						<div class="screenshot-slot"><strong><code>-m 3</code></strong>Add the image here.</div>
-						<div class="screenshot-slot"><strong><code>-m 4</code></strong>Add the image here.</div>
-						<div class="screenshot-slot"><strong><code>-m 100</code></strong>Add the image here.</div>
+						<div class="screenshot-slot"><strong><code>-m 0</code></strong><img src="CBbunny_rr_m0_1024spp.png" alt="CBbunny Russian Roulette m0"/><code>CBbunny_rr_m0_1024spp.png</code></div>
+						<div class="screenshot-slot"><strong><code>-m 1</code></strong><img src="CBbunny_rr_m1_1024spp.png" alt="CBbunny Russian Roulette m1"/><code>CBbunny_rr_m1_1024spp.png</code></div>
+						<div class="screenshot-slot"><strong><code>-m 2</code></strong><img src="CBbunny_rr_m2_1024spp.png" alt="CBbunny Russian Roulette m2"/><code>CBbunny_rr_m2_1024spp.png</code></div>
+						<div class="screenshot-slot"><strong><code>-m 3</code></strong><img src="CBbunny_rr_m3_1024spp.png" alt="CBbunny Russian Roulette m3"/><code>CBbunny_rr_m3_1024spp.png</code></div>
+						<div class="screenshot-slot"><strong><code>-m 4</code></strong><img src="CBbunny_rr_m4_1024spp.png" alt="CBbunny Russian Roulette m4"/><code>CBbunny_rr_m4_1024spp.png</code></div>
+						<div class="screenshot-slot"><strong><code>-m 100</code></strong><img src="CBbunny_rr_m100_1024spp.png" alt="CBbunny Russian Roulette m100"/><code>CBbunny_rr_m100_1024spp.png</code></div>
 					</div>
 				</div>
 			</li>
@@ -744,13 +741,13 @@
 						I left a final sample-rate comparison grid here for the 4-light-ray renders.
 					</p>
 					<div class="screenshot-grid">
-						<div class="screenshot-slot"><strong><code>1 spp</code></strong>Add the image here.</div>
-						<div class="screenshot-slot"><strong><code>2 spp</code></strong>Add the image here.</div>
-						<div class="screenshot-slot"><strong><code>4 spp</code></strong>Add the image here.</div>
-						<div class="screenshot-slot"><strong><code>8 spp</code></strong>Add the image here.</div>
-						<div class="screenshot-slot"><strong><code>16 spp</code></strong>Add the image here.</div>
-						<div class="screenshot-slot"><strong><code>64 spp</code></strong>Add the image here.</div>
-						<div class="screenshot-slot"><strong><code>1024 spp</code></strong>Add the image here.</div>
+						<div class="screenshot-slot"><strong><code>1 spp</code></strong><img src="CBbunny_s1_l4.png" alt="CBbunny at 1 sample per pixel"/><code>CBbunny_s1_l4.png</code></div>
+						<div class="screenshot-slot"><strong><code>2 spp</code></strong><img src="CBbunny_s2_l4.png" alt="CBbunny at 2 samples per pixel"/><code>CBbunny_s2_l4.png</code></div>
+						<div class="screenshot-slot"><strong><code>4 spp</code></strong><img src="CBbunny_s4_l4.png" alt="CBbunny at 4 samples per pixel"/><code>CBbunny_s4_l4.png</code></div>
+						<div class="screenshot-slot"><strong><code>8 spp</code></strong><img src="CBbunny_s8_l4.png" alt="CBbunny at 8 samples per pixel"/><code>CBbunny_s8_l4.png</code></div>
+						<div class="screenshot-slot"><strong><code>16 spp</code></strong><img src="CBbunny_s16_l4.png" alt="CBbunny at 16 samples per pixel"/><code>CBbunny_s16_l4.png</code></div>
+						<div class="screenshot-slot"><strong><code>64 spp</code></strong><img src="CBbunny_s64_l4.png" alt="CBbunny at 64 samples per pixel"/><code>CBbunny_s64_l4.png</code></div>
+						<div class="screenshot-slot"><strong><code>1024 spp</code></strong><img src="CBbunny_s1024_l4.png" alt="CBbunny at 1024 samples per pixel"/><code>CBbunny_s1024_l4.png</code></div>
 					</div>
 				</div>
 			</li>
@@ -808,19 +805,23 @@
 					<div class="screenshot-grid">
 						<div class="screenshot-slot">
 							<strong>Scene 1 Rate</strong>
-							Add the sample rate image for the first scene here.
+							<img src="CBbunny_adaptive_2048_rate.png" alt="Adaptive sampling rate image for CBbunny"/>
+							<code>CBbunny_adaptive_2048_rate.png</code>
 						</div>
 						<div class="screenshot-slot">
 							<strong>Scene 1 Final</strong>
-							Add the final converged render for the first scene here.
+							<img src="CBbunny_adaptive_2048.png" alt="Adaptive sampling final render for CBbunny"/>
+							<code>CBbunny_adaptive_2048.png</code>
 						</div>
 						<div class="screenshot-slot">
 							<strong>Scene 2 Rate</strong>
-							Add the sample rate image for the second scene here.
+							<img src="CBlucy_adaptive_2048_rate.png" alt="Adaptive sampling rate image for CBlucy"/>
+							<code>CBlucy_adaptive_2048_rate.png</code>
 						</div>
 						<div class="screenshot-slot">
 							<strong>Scene 2 Final</strong>
-							Add the final converged render for the second scene here.
+							<img src="CBlucy_adaptive_2048.png" alt="Adaptive sampling final render for CBlucy"/>
+							<code>CBlucy_adaptive_2048.png</code>
 						</div>
 					</div>
 				</div>
