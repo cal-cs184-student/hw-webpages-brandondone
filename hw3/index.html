@@ -339,17 +339,14 @@
 				<div class="answer-block">
 					<div class="screenshot-grid">
 						<div class="screenshot-slot">
-							<strong>Render 1</strong>
 							<img src="pt1_banana.png" alt="Normal shading render of banana scene"/>
 							<code>pt1_banana.png</code>
 						</div>
 						<div class="screenshot-slot">
-							<strong>Render 2</strong>
 							<img src="pt1_cube.png" alt="Normal shading render of cube scene"/>
 							<code>pt1_cube.png</code>
 						</div>
 						<div class="screenshot-slot">
-							<strong>Render 3</strong>
 							<img src="pt1_plane.png" alt="Normal shading render of plane scene"/>
 							<code>pt1_plane.png</code>
 						</div>
@@ -407,17 +404,14 @@
 				<div class="answer-block">
 					<div class="screenshot-grid">
 						<div class="screenshot-slot">
-							<strong>Large Scene 1</strong>
 							<img src="pt2_cbdragon.png" alt="BVH render of CBdragon"/>
 							<code>pt2_cbdragon.png</code>
 						</div>
 						<div class="screenshot-slot">
-							<strong>Large Scene 2</strong>
 							<img src="pt2_cblucy.png" alt="BVH render of CBlucy"/>
 							<code>pt2_cblucy.png</code>
 						</div>
 						<div class="screenshot-slot">
-							<strong>Large Scene 3</strong>
 							<img src="pt2_walle.png" alt="BVH render of walle"/>
 							<code>pt2_walle.png</code>
 						</div>
@@ -649,12 +643,10 @@
 					</p>
 					<div class="screenshot-grid">
 						<div class="screenshot-slot">
-							<strong>GI Render 1</strong>
 							<img src="CBbunny_gi_1024spp.png" alt="CBbunny global illumination render"/>
 							<code>CBbunny_gi_1024spp.png</code>
 						</div>
 						<div class="screenshot-slot">
-							<strong>GI Render 2</strong>
 							<img src="CBspheres_gi_1024spp.png" alt="CBspheres global illumination render"/>
 							<code>CBspheres_gi_1024spp.png</code>
 						</div>
@@ -721,9 +713,6 @@
 			<li>
 				<span class="prompt">For <code>CBbunny.dae</code>, output the Russian Roulette rendering with <code>max_ray_depth</code> set to 0, 1, 2, 3, 4, and 100.</span>
 				<div class="answer-block">
-					<p>
-						This section is ready for the Russian Roulette comparison renders.
-					</p>
 					<div class="screenshot-grid">
 						<div class="screenshot-slot"><strong><code>-m 0</code></strong><img src="CBbunny_rr_m0_1024spp.png" alt="CBbunny Russian Roulette m0"/><code>CBbunny_rr_m0_1024spp.png</code></div>
 						<div class="screenshot-slot"><strong><code>-m 1</code></strong><img src="CBbunny_rr_m1_1024spp.png" alt="CBbunny Russian Roulette m1"/><code>CBbunny_rr_m1_1024spp.png</code></div>
@@ -737,9 +726,6 @@
 			<li>
 				<span class="prompt">Pick one scene and compare rendered views with various sample-per-pixel rates, including at least 1, 2, 4, 8, 16, 64, and 1024. Use 4 light rays.</span>
 				<div class="answer-block">
-					<p>
-						I left a final sample-rate comparison grid here for the 4-light-ray renders.
-					</p>
 					<div class="screenshot-grid">
 						<div class="screenshot-slot"><strong><code>1 spp</code></strong><img src="CBbunny_s1_l4.png" alt="CBbunny at 1 sample per pixel"/><code>CBbunny_s1_l4.png</code></div>
 						<div class="screenshot-slot"><strong><code>2 spp</code></strong><img src="CBbunny_s2_l4.png" alt="CBbunny at 2 samples per pixel"/><code>CBbunny_s2_l4.png</code></div>
@@ -798,28 +784,20 @@
 			<li>
 				<span class="prompt">Pick two scenes and render them with at least 2048 samples per pixel. Show a sample rate image and the corresponding noise-free render for each one. Use 1 sample per light and at least 5 for max ray depth.</span>
 				<div class="answer-block">
-					<p>
-						I set up two side-by-side scene comparison groups below so the adaptive sampling rate images
-						and their final noise-free renders can be dropped in cleanly.
-					</p>
 					<div class="screenshot-grid">
 						<div class="screenshot-slot">
-							<strong>Scene 1 Rate</strong>
 							<img src="CBbunny_adaptive_2048_rate.png" alt="Adaptive sampling rate image for CBbunny"/>
 							<code>CBbunny_adaptive_2048_rate.png</code>
 						</div>
 						<div class="screenshot-slot">
-							<strong>Scene 1 Final</strong>
 							<img src="CBbunny_adaptive_2048.png" alt="Adaptive sampling final render for CBbunny"/>
 							<code>CBbunny_adaptive_2048.png</code>
 						</div>
 						<div class="screenshot-slot">
-							<strong>Scene 2 Rate</strong>
 							<img src="CBlucy_adaptive_2048_rate.png" alt="Adaptive sampling rate image for CBlucy"/>
 							<code>CBlucy_adaptive_2048_rate.png</code>
 						</div>
 						<div class="screenshot-slot">
-							<strong>Scene 2 Final</strong>
 							<img src="CBlucy_adaptive_2048.png" alt="Adaptive sampling final render for CBlucy"/>
 							<code>CBlucy_adaptive_2048.png</code>
 						</div>
