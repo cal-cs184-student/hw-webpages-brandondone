@@ -3,32 +3,112 @@
 		<script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=default'></script>
 		<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
 		<style>
+			:root {
+				--page-bg: #f4f1ea;
+				--card-bg: #fffdf8;
+				--text: #2f2a24;
+				--muted: #6d6257;
+				--accent: #8b5e34;
+				--accent-soft: #efe1d0;
+				--border: #dbcab6;
+			}
+
+			body {
+				margin: 0;
+				font-family: 'Inter', sans-serif;
+				line-height: 1.7;
+				color: var(--text);
+				background:
+					radial-gradient(circle at top, #fffaf1 0%, #f4f1ea 45%, #ece6dd 100%);
+			}
+
 			h1 {
 				text-align: center;
+				margin-bottom: 10px;
+			}
+
+			h2 {
+				margin-top: 48px;
+				margin-bottom: 18px;
+				padding-bottom: 8px;
+				border-bottom: 2px solid var(--border);
+			}
+
+			h3 {
+				margin-top: 0;
+				margin-bottom: 12px;
+				color: var(--accent);
 			}
 
 			.container {
 				margin: 0 auto;
-				padding: 60px 20%;
+				max-width: 960px;
+				padding: 56px 24px 72px;
 			}
 
 			figure {
 				text-align: center;
+				margin: 28px 0;
 			}
 
 			img {
 				display: inline-block;
+				max-width: 100%;
+				border-radius: 14px;
 			}
 
-			body {
-				font-family: 'Inter', sans-serif;
+			p {
+				margin: 0 0 14px;
+			}
+
+			a {
+				color: var(--accent);
+			}
+
+			code {
+				padding: 2px 6px;
+				border-radius: 6px;
+				background: #f4eadc;
+				font-size: 0.95em;
+			}
+
+			.question-box,
+			.content-card {
+				background: var(--card-bg);
+				border: 1px solid var(--border);
+				border-radius: 18px;
+				box-shadow: 0 14px 35px rgba(90, 68, 44, 0.08);
+			}
+
+			.question-box {
+				margin-bottom: 20px;
+				padding: 16px 18px;
+				background: linear-gradient(135deg, #fbf4ea 0%, #f7ecdf 100%);
+			}
+
+			.content-card {
+				margin-bottom: 18px;
+				padding: 22px 24px;
+			}
+
+			.pipeline-list {
+				margin: 0;
+				padding-left: 22px;
+			}
+
+			.pipeline-list li {
+				margin-bottom: 8px;
+			}
+
+			.inline-note {
+				color: var(--muted);
 			}
 		</style>
 	</head>
 	<body>
 		<div class="container">
-		<h1>CS184/284A Spring 2025 Homework 3 Write-Up</h1>
-		<div style="text-align: center;">Names: </div>
+		<h1>CS184 Spring 2026 Homework 3 Write-Up</h1>
+		<div style="text-align: center;">Name: Brandon Done</div>
 
 		<br>
 
@@ -40,42 +120,95 @@
 			<figcaption>You can add images with captions!</figcaption>
 		</figure>
 
-		<!--
-		We've already added one heading per part, to make your write-up as navigable when grading. Please fit your write-up within these sections!
-		-->
-
 		<h2>Overview</h2>
 		Give a high-level overview of what you implemented in this homework. Think about what you've built as a whole. Share your thoughts on what interesting things you've learned from completing the homework.
 
 		<h2>Part 1: Ray Generation and Scene Intersection</h2>
-		Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-
-		<p>Here is an example 2x2 gridlike structure using an HTML table. Each <b>tr</b> is a row and each <b>td</b> is a column in that row. You might find this useful for framing and showing your result images in an organized fashion.</p>
-		<div style="display: flex; flex-direction: column; align-items: center;">
-			<table style="width: 100%; text-align: center; border-collapse: collapse;">
-			  <tr>
-				<td style="text-align: center;">
-				  <img src="cornell.png" width="400px"/>
-				  <figcaption>Caption goes here.</figcaption>
-				</td>
-				<td style="text-align: center;">
-				  <img src="cornell.png" width="400px"/>
-				  <figcaption>Caption goes here.</figcaption>
-				</td>
-			  </tr>
-			  <tr>
-				<td style="text-align: center;">
-				  <img src="cornell.png" width="400px"/>
-				  <figcaption>Caption goes here.</figcaption>
-				</td>
-				<td style="text-align: center;">
-				  <img src="cornell.png" width="400px"/>
-				  <figcaption>Caption goes here.</figcaption>
-				</td>
-			  </tr>
-			</table>
+		<div class="question-box">
+			<strong>Question:</strong> Walk through the ray generation and primitive intersection parts of the rendering pipeline.
 		</div>
-		
+
+		<div class="content-card">
+			<h3>Overview</h3>
+			<p>
+				The pipeline starts in <code>pathtracer.cpp</code>. <code>PathTracer::raytrace_pixel(x, y)</code>
+				treats <code>(x, y)</code> as the bottom-left corner of a pixel, draws <code>ns_aa</code>
+				random 2D offsets from <code>gridSampler</code>, and converts each jittered sample into
+				normalized image coordinates by dividing by <code>sampleBuffer.w</code> and
+				<code>sampleBuffer.h</code>. For each sample, it calls <code>camera-&gt;generate_ray(...)</code>,
+				traces that ray with <code>est_radiance_global_illumination(...)</code>, averages the returned
+				radiance, and writes the final color into the sample buffer.
+			</p>
+			<p>
+				Ray generation happens in <code>camera.cpp</code>. <code>Camera::generate_ray(x, y)</code>
+				maps normalized image coordinates from <code>[0,1] x [0,1]</code> onto the virtual sensor plane
+				at <code>z = -1</code> in camera space. The sensor extents are set by
+				<code>tan(hFov / 2)</code> and <code>tan(vFov / 2)</code>, so <code>(0,0)</code> lands at the
+				bottom-left of the sensor and <code>(1,1)</code> lands at the top-right. That camera-space
+				direction <code>(sensor_x, sensor_y, -1)</code> is rotated into world space with
+				<code>c2w</code>, normalized, and packaged into a <code>Ray</code> whose origin is
+				<code>pos</code>. The ray's valid interval is initialized to <code>[nClip, fClip]</code>, so
+				anything before the near plane or beyond the far plane is ignored immediately.
+			</p>
+		</div>
+
+		<div class="content-card">
+			<h3>Intersection Flow</h3>
+			<p>
+				Tracing enters <code>pathtracer.cpp</code> in
+				<code>est_radiance_global_illumination</code>. Right now it asks
+				<code>bvh-&gt;intersect(r, &amp;isect)</code> for the nearest hit. In this codebase,
+				<code>bvh.cpp</code> is still the starter implementation, so it effectively loops over all
+				primitives and calls each primitive's <code>intersect(...)</code>.
+			</p>
+			<p>
+				The key contract is that every primitive must only report hits with <code>t</code> inside
+				<code>r.min_t</code> and <code>r.max_t</code>, and if it finds one, it must shrink
+				<code>r.max_t</code> to that closer hit. That is how the nearest intersection wins without
+				extra sorting.
+			</p>
+			<p>
+				The hit record is stored in <code>intersection.h</code>. A valid primitive intersection fills
+				in <code>isect.t</code>, <code>isect.n</code>, <code>isect.primitive</code>, and
+				<code>isect.bsdf</code>. After that, the current starter shading code returns either a debug
+				color from ray direction or a normal-based color from the surface normal.
+			</p>
+		</div>
+
+		<div class="content-card">
+			<h3>Triangle and Sphere Intersection</h3>
+			<p>
+				Triangle intersection is implemented in <code>triangle.cpp</code>. Both
+				<code>has_intersection(...)</code> and <code>intersect(...)</code> use a
+				Moller-Trumbore-style solve. They compute barycentric coordinates and reject any hit outside
+				the triangle or outside the ray interval. On a valid hit they set <code>r.max_t = t</code>.
+				The full <code>intersect(...)</code> version also interpolates the shading normal from
+				<code>n1</code>, <code>n2</code>, and <code>n3</code> using barycentric weights, normalizes it,
+				and stores the primitive and BSDF.
+			</p>
+			<p>
+				Sphere intersection is implemented in <code>sphere.cpp</code>. <code>Sphere::test(...)</code>
+				solves the quadratic for the two ray-sphere roots.
+				<code>has_intersection(...)</code> and <code>intersect(...)</code> pick the nearest root that
+				lies within <code>[r.min_t, r.max_t]</code>, then tighten <code>r.max_t</code>. The full
+				<code>intersect(...)</code> computes the hit point <code>r.o + t * r.d</code>, uses the
+				analytic sphere normal <code>(hit_p - center).unit()</code>, and fills the same intersection
+				fields as the triangle case.
+			</p>
+		</div>
+
+		<div class="content-card">
+			<h3>End-to-End Path</h3>
+			<p class="inline-note">From pixel sample to shading result, the flow is:</p>
+			<ol class="pipeline-list">
+				<li>Sample a point inside the pixel in <code>pathtracer.cpp</code>.</li>
+				<li>Generate a world-space ray in <code>camera.cpp</code>.</li>
+				<li>Traverse the scene through <code>pathtracer.cpp</code> and <code>bvh.cpp</code>.</li>
+				<li>Find the nearest primitive hit in <code>triangle.cpp</code> or <code>sphere.cpp</code>.</li>
+				<li>Return the shading result to the pixel accumulator.</li>
+			</ol>
+		</div>
+
 		<h2>Part 2: Bounding Volume Hierarchy</h2>
 		Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
 
@@ -87,20 +220,7 @@
 
 		<h2>Part 5: Adaptive Sampling</h2>
 		Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-
-		<h2>(Optional) Part 6: Extra Credit Opportunities</h2>
-		Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
 		
-		<h2>Additional Notes (please remove)</h2>
-		<ul>
-			<li>You can also add code if you'd like as so: <code>code code code</code></li>
-			<li>If you'd like to add math equations, 
-				<ul>
-					<li>You can write inline equations like so: \( a^2 + b^2 = c^2 \)</li>
-					<li>You can write display equations like so: \[ a^2 + b^2 = c^2 \]</li>
-				</ul>
-			</li>
-		</ul>
 		</div>
 	</body>
 </html>
