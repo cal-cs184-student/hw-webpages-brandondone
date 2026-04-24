@@ -509,13 +509,24 @@
 				<li>
 					<span class="prompt">Explain in your own words what is a shader program and how vertex and fragment shaders work together to create lighting and material effects.</span>
 					<div class="answer-block">
-						<p class="placeholder">Add your Part 5.1 response here.</p>
+						<p>A shader program is a small GPU program used during rendering. In this assignment, a shader program usually consists of a vertex shader paired with a fragment shader.</p>
+						<p>The vertex shader runs once per vertex. It transforms vertex positions into screen space and passes useful data forward, such as world-space position, normals, UV coordinates, and tangents.</p>
+						<p>The fragment shader runs once per rendered fragment or pixel. It uses the interpolated values from the vertex shader to compute the final color. This is where lighting, texture lookup, bump mapping, mirror reflections, and most of the visible material behavior happen.</p>
+						<p>Together, the two shaders let the GPU evaluate material and lighting effects in parallel instead of doing all of that work on the CPU.</p>
 					</div>
 				</li>
 				<li>
 					<span class="prompt">Explain the Blinn-Phong shading model in your own words. Show a screenshot of your Blinn-Phong shader outputting only the ambient component, a screen shot only outputting the diffuse component, a screen shot only outputting the specular component, and one using the entire Blinn-Phong model.</span>
 					<div class="answer-block">
-						<p class="placeholder">Add your Part 5.2 response here.</p>
+						<p>The Blinn-Phong model combines three lighting terms: ambient, diffuse, and specular. Ambient represents a constant base level of light so that shadowed areas are not completely black. Diffuse represents matte lighting and depends on how directly the surface faces the light. Specular represents the shiny highlight and is based on the half-vector between the light direction and the view direction.</p>
+						<p>In the shader, the final color is the sum of those three terms: <code>ambient + diffuse + specular</code>.</p>
+						<p>To isolate the individual components, I temporarily edited <code>Phong.frag</code> so the shader output only one term at a time before switching back to the full combined result.</p>
+						<ul class="answer-list">
+							<li><strong>Screenshot 1:</strong> ambient-only output, which looks flat and evenly colored because it does not depend on surface orientation.</li>
+							<li><strong>Screenshot 2:</strong> diffuse-only output, which shows smooth light falloff based on the angle between the light and the surface normal.</li>
+							<li><strong>Screenshot 3:</strong> specular-only output, which mostly shows concentrated highlights where the reflected lighting aligns with the viewer.</li>
+							<li><strong>Screenshot 4:</strong> the full Blinn-Phong model, which combines all three terms into a more complete shaded appearance.</li>
+						</ul>
 					</div>
 					<div class="answer-block">
 						<div class="screenshot-grid">
@@ -534,13 +545,18 @@
 								<img src="5_1_3.png" alt="Part 5.2 screenshot 3" loading="lazy" />
 								<code>5_1_3.png</code>
 							</div>
+							<div class="screenshot-slot">
+								<strong>Screenshot 4</strong>
+								<img src="5_1_4.png" alt="Part 5.2 screenshot 4" loading="lazy" />
+								<code>5_1_4.png</code>
+							</div>
 						</div>
 					</div>
 				</li>
 				<li>
 					<span class="prompt">Show a screenshot of your texture mapping shader using your own custom texture by modifying the textures in <code>/textures/</code>.</span>
 					<div class="answer-block">
-						<p class="placeholder">Add your Part 5.3 response here.</p>
+						<p>Screenshot 1 below shows the texture mapping shader using my custom texture from the <code>/textures/</code> directory.</p>
 					</div>
 					<div class="answer-block">
 						<div class="screenshot-grid">
@@ -589,18 +605,14 @@
 								<img src="5_3_6.png" alt="Part 5.4 screenshot 6" loading="lazy" />
 								<code>5_3_6.png</code>
 							</div>
-							<div class="screenshot-slot">
-								<strong>Screenshot 7</strong>
-								<img src="5_3_7.png" alt="Part 5.4 screenshot 7" loading="lazy" />
-								<code>5_3_7.png</code>
-							</div>
 						</div>
 					</div>
 				</li>
 				<li>
 					<span class="prompt">Show a screenshot of your mirror shader on the cloth and on the sphere.</span>
 					<div class="answer-block">
-						<p class="placeholder">Add your Part 5.5 response here.</p>
+						<p>Screenshots 1 and 2 below show the mirror shader on the cloth and on the sphere.</p>
+						<p>The mirror shader computes the view direction from the camera to the fragment, reflects it around the surface normal, and samples the cubemap in that reflected direction. On the cloth, the result looks shiny and environment-reflective. On the sphere, the reflection appears cleaner and easier to read because the sphere has smooth, continuous normals.</p>
 					</div>
 					<div class="answer-block">
 						<div class="screenshot-grid">
@@ -620,7 +632,7 @@
 				<li>
 					<span class="prompt">Explain what you did in your custom shader, if you made one.</span>
 					<div class="answer-block">
-						<p class="placeholder">Add your Part 5.6 response here.</p>
+						<p>I did not implement a custom shader. I completed the required Diffuse, Phong, Texture, Bump, Displacement, and Mirror shaders instead.</p>
 					</div>
 				</li>
 			</ol>
