@@ -571,7 +571,19 @@
 				<li>
 					<span class="prompt">Show a screenshot of bump mapping on the cloth and on the sphere. Show a screenshot of displacement mapping on the sphere. Use the same texture for both renders. You can either provide your own texture or use one of the ones in the textures directory, BUT choose one that's not the default <code>texture_2.png</code>. Compare the two approaches and resulting renders in your own words. Compare how your two shaders react to the sphere by changing the sphere mesh's coarseness by using <code>-o 16 -a 16</code> and then <code>-o 128 -a 128</code>.</span>
 					<div class="answer-block">
-						<p class="placeholder">Add your Part 5.4 response here.</p>
+						<p>For these renders, I used the same non-default height texture for both shaders by temporarily replacing <code>textures/texture_2.png</code> with <code>texture_3.png</code>. That way, both the bump and displacement shaders sampled the same height map while still satisfying the requirement not to use the default texture. For the bump renders I used a normal value around <code>2</code> and a height value around <code>1</code>, and for displacement I used a much larger normal value around <code>100</code> with height around <code>0.02</code>.</p>
+						<p>Bump mapping changes only the normals used for lighting. The cloth or sphere geometry stays physically smooth, but the lighting makes the surface appear to have raised and recessed detail. Displacement mapping actually moves vertices along their normals based on the height map, so it changes the real geometry and can even affect the silhouette. Because of that, displacement depends much more heavily on mesh resolution.</p>
+						<ul class="answer-list">
+							<li><strong>Screenshot 1:</strong> bump mapping on the cloth in <code>scene/pinned4.json</code>.</li>
+							<li><strong>Screenshot 2:</strong> bump mapping on the sphere in <code>scene/sphere.json</code>.</li>
+							<li><strong>Screenshot 3:</strong> displacement mapping on the sphere in <code>scene/sphere.json</code>.</li>
+							<li><strong>Screenshot 4:</strong> bump mapping on a coarse sphere using <code>-o 16 -a 16</code>.</li>
+							<li><strong>Screenshot 5:</strong> displacement mapping on a coarse sphere using <code>-o 16 -a 16</code>.</li>
+							<li><strong>Screenshot 6:</strong> bump mapping on a finer sphere using <code>-o 128 -a 128</code>.</li>
+							<li><strong>Screenshot 7:</strong> displacement mapping on a finer sphere using <code>-o 128 -a 128</code>.</li>
+						</ul>
+						<p>On the coarse <code>16 x 16</code> sphere, bump mapping still looks fairly detailed because it works per fragment and only alters lighting. Displacement mapping on that same coarse mesh looks much chunkier because there are not enough vertices to represent the height changes smoothly. On the finer <code>128 x 128</code> sphere, displacement becomes much more convincing because the mesh has enough vertices to actually represent the texture's height variation.</p>
+						<p>In short, bump mapping is cheaper and works well even on coarse meshes, but it is fundamentally a lighting illusion. Displacement mapping produces real geometric detail, but it needs a dense mesh to look smooth and convincing.</p>
 					</div>
 					<div class="answer-block">
 						<div class="screenshot-grid">
@@ -604,6 +616,11 @@
 								<strong>Screenshot 6</strong>
 								<img src="5_3_6.png" alt="Part 5.4 screenshot 6" loading="lazy" />
 								<code>5_3_6.png</code>
+							</div>
+							<div class="screenshot-slot">
+								<strong>Screenshot 7</strong>
+								<img src="5_3_7.png" alt="Part 5.4 screenshot 7" loading="lazy" />
+								<code>5_3_7.png</code>
 							</div>
 						</div>
 					</div>
