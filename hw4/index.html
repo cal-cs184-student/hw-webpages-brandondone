@@ -204,9 +204,11 @@
 
 			<h2>Overview</h2>
 			<div class="content-card">
-				<p class="placeholder">
-					Add your high-level overview here. Summarize what you implemented across the assignment,
-					what you found interesting, and what stood out while working through cloth simulation and shaders.
+				<p>
+					In this assignment, I built the main pieces of a cloth simulation and shading pipeline. I started by representing the cloth as a grid of point masses connected by structural, shearing, and bending springs, then simulated its motion with numerical integration while exploring how parameters like <code>ks</code>, density, and damping affect stretching, sagging, and stability. I also implemented collisions against spheres and planes, added self-collision using spatial hashing, and documented how those systems change the cloth's drape and folding behavior across different scenes.
+				</p>
+				<p>
+					The most interesting part was seeing how sensitive cloth behavior is to both physical parameters and rendering choices. Small changes in stiffness or density can make the same fabric look loose, heavy, springy, or almost rigid, while collision handling is what makes the motion feel believable instead of letting the cloth clip through itself or other objects. On the rendering side, experimenting with Blinn-Phong, texture, bump, displacement, and mirror shaders made it especially clear how much surface appearance depends on the balance between lighting tricks and real geometric detail.
 				</p>
 			</div>
 
